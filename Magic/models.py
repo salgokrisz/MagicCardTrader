@@ -1,18 +1,21 @@
 from django.db import models
 
 
-class User( models.Model):
+class User(models.Model):
     name = models.CharField(max_length = 250)
     email_address = models.CharField(max_length = 500)
-    available_cards = models.CharField(max_length = 50)
+    available_cards = models.IntegerField()
+
+    def __str__ (self):
+        return self.name + " - " + str(self.available_cards)
 
 
 
 class CardsForSale (models.Model):
     card_name = models.CharField(max_length = 150)
     set_name = models.CharField(max_length = 150)
-    price = models.CharField(max_length = 50)
-    amount = models.CharField(max_length = 50)
+    price = models.IntegerField()
+    amount = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
