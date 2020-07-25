@@ -7,7 +7,7 @@ class User(models.Model):
     available_cards = models.IntegerField()
 
     def __str__ (self):
-        return self.name + " - " + str(self.available_cards)
+        return "Name: " + self.name + " - Cards for sale: " + str(self.available_cards)
 
 
 
