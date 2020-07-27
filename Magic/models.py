@@ -1,22 +1,31 @@
 from django.db import models
+from django.db.models import Count
 
 
 class User(models.Model):
     name = models.CharField(max_length = 250)
     email_address = models.CharField(max_length = 500)
-    available_cards = models.IntegerField()
+    #available_cards = models.IntegerField()
 
     def __str__ (self):
-        return "Name: " + self.name + " - Cards for sale: " + str(self.available_cards)
+        return self.name# + " - Cards for sale: " + str(self.available_cards)#str(Card.objects.annotate(total=Count('user')))
 
 
 
-class CardsForSale (models.Model):
-    card_name = models.CharField(max_length = 150)
+
+class Card(models.Model):
+    name = models.CharField(max_length = 150)
     set_name = models.CharField(max_length = 150)
     price = models.IntegerField()
-    amount = models.IntegerField()
+    #amount = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    @classmethod
+    def user_cards(self):
+        return Card.objects.annotate(total=Count('user'))
+
+    def __str__ (self):
+        return self.name + " - " + self.set_name + " - Price: " + str(self.price)# + " - Seller:\n " + str(self.user)
 
 
 # after creating a new model we need to migrate it into the database.

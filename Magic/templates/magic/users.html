@@ -1,4 +1,5 @@
 {% if all_users %}
+<h2>Users</h2>
     <ul>
         {% for user in all_users %}
         <li><a href="/users/{{ user.id }}">{{user.name}}</a></li>
