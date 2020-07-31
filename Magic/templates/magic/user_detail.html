@@ -1,9 +1,10 @@
-<h1>User Details</h1>
+<h5><a href="{% url 'Magic:users' %}">Back to Users</a></h5>
+<h2>User Details</h2>
 
-<h2>Name: {{user.name}} </h3>
-<h3>Available Cards {{user.card_set.count}} </h3>
+<h3>Name: {{user.name}} </h3>
+<h4>Available Cards {{user.card_set.count}} </h4>
 <ul>
     {% for card in user.card_set.all %}
-    <li>{{ card.name }} - {{card.price}}</li>
+    <li><a href="{% url 'Magic:card_detail' card.id %}">{{ card.name }}</a> - Price: {{card.price}}</li>
     {% endfor %}
 </ul>

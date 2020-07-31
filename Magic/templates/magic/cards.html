@@ -1,0 +1,12 @@
+<h1><a href="{% url 'Magic:index' %}">Magic Card Trader</a></h1>
+{% if all_cards %}
+<h2>Cards for sale</h2>
+    <ul>
+        {% for card in all_cards %}
+        <li><a href="{% url 'Magic:card_detail' card.id %}">{{card.name}}</a>
+            | Price: {{card.price}} | Seller: {{card.user}}</li>  
+        {% endfor %}
+    </ul>
+{% else %}
+    <h3>No cards available for sale</h3>
+{% endif %}

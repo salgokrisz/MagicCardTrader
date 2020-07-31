@@ -1,5 +1,5 @@
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from .models import User
 from .models import Card
@@ -36,15 +36,17 @@ def users(request):
     }
     return HttpResponse(template.render(context, request))
 
-def user(request, user_id):
+def user_detail(request, user_id):
     total_cards = User.objects.all()
     template = loader.get_template('magic/user_detail.html')
     try:
         user = User.objects.get(pk=user_id)
+        card = Card.objects.all()
     except User.DoesNotExist:
         raise Http404("User does not exist")
     context = {
        'user': user,
+       'card': card,
 
     }
     return HttpResponse(template.render(context, request))
@@ -53,6 +55,28 @@ def user(request, user_id):
     # eladó lapok között a kersés
     # elérhetőség/átvételi lehetőség
     # üzenetküldés
+
+def cards(request):
+    all_cards = Card.objects.all()
+    template = loader.get_template('magic/cards.html')
+    context = {
+        'all_cards': all_cards,
+    }
+    return HttpResponse(template.render(context, request))
+
+def card_detail(request, card_id):
+    
+    template = loader.get_template('magic/card_detail.html')
+    try:
+        card = Card.objects.get(pk=card_id)
+        user = User.objects.all()
+    except Card.DoesNotExist:
+        raise Http404("Card does not exists")
+    context = {
+        'card': card,
+        'user': user,
+    }
+    return HttpResponse(template.render(context, request))
 
 def about(request):
     return HttpResponse('<h3>Magic Card Trader About</h3>')
