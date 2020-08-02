@@ -1,4 +1,45 @@
-<h1>Wellcome to Magic Card Trader</h1>
+<!-- Loads the path to the static files -->
+{% load static %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Bangers"  />
+<link rel="stylesheet" type="text/css" href="{% static 'magic/style.css' %}" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        
+        <!--Header-->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'Magic:index' %}">Magic Card Trader</a>
+        </div>
+        <!--Items-->
+        <div class="collapsable navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="{% url 'Magic:users' %}">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;
+                        Users
+                    </a>
+                </li>
+
+                <li class="">
+                    <a href="{% url 'Magic:cards' %}">
+                        <span class="glyphicon glyphicon-king" aria-hidden="true"></span>&nbsp;
+                        Cards for sale
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
 
 
 <a href="{% url 'Magic:users' %}" style="font-size: 25px;">Browse Users</a><br>
