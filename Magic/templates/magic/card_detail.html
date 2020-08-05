@@ -1,10 +1,14 @@
-<h5><a href="{% url 'Magic:cards' %}">Back to Cards</a></h5>
-<h2>Card Details</h2>
+{% extends 'magic/base.html' %}
 
-<h3>Name: {{card.name}} </h3>
-<h3>Set: {{card.set_name}} </h3>
-<h3>Price: {{card.price}} </h3>
+{% block body %}
+    <h5><a href="{% url 'Magic:cards' %}">Back to Cards</a></h5>
+    <h2>Card Details</h2>
+
+    <h3>Name: {{card.name}} </h3>
+    <h3>Set: {{card.set_name}} </h3>
+    <h3>Price: {{card.price}} </h3>
 
 
 
-<h4>Seller: <a href="{% url 'Magic:user_detail' card.user.id %}">{{card.user}}</a> </h3>
+    <h4>Seller: <a href="{% url 'Magic:user_detail' card.user.id %}">{{card.user}}</a> </h3>
+{% endblock %}

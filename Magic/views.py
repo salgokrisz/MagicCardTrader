@@ -4,6 +4,22 @@ from django.http import HttpResponse
 from .models import User
 from .models import Card
 from django.template import loader
+from django.views import generic
+
+#generic views but neet to figure out how these work
+#class indexView(generic.ListView):
+#    tamplate_name = 'magic/index.html'
+#
+#class UsersView(generic.ListView):
+#    tamplate_name = 'magic/users.html'
+#    context_object_name = 'all_users'
+#
+#    def get_queryset(self):
+#        return User.objects.all()
+#
+#class UserDetailView(generic.ListView):
+#    model = User
+#    template_name = 'magic/user_detail.html'
 
 # Create your views here.
 

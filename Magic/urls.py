@@ -8,6 +8,8 @@ urlpatterns = [
     path('', views.index, name='index'),
 
     # /users/
+    #path('users/', views.UsersView.as_view(), name="users"), #generic views
+    #re_path(r'^users/(?P<pk>[0-9]+)/$',views.UserDetailView.as_view(), name="user_detail"), #generic views
     path('users/', views.users, name="users"),
     # /users/123/
     re_path(r'^users/(?P<user_id>[0-9]+)/$',views.user_detail, name="user_detail"),
