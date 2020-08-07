@@ -5,6 +5,8 @@ from .models import User
 from .models import Card
 from django.template import loader
 from django.views import generic
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
 
 #generic views but neet to figure out how these work
 #class indexView(generic.ListView):
@@ -96,3 +98,15 @@ def card_detail(request, card_id):
 
 def about(request):
     return HttpResponse('<h3>Magic Card Trader About</h3>')
+
+class CardCreate(CreateView):
+    model = Card
+    fields = ['name', 'set_name', 'price', 'user']
+
+class CardUpdate(UpdateView):
+    model = Card
+    fields = ['name', 'set_name', 'price', 'user']
+
+class CardDelete(DeleteView):
+    model = Card
+    success_url = reverse_lazy('Magic:user_detail')

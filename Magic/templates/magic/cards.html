@@ -2,10 +2,10 @@
 {% block title %} Cards for sale  {% endblock %}
 {% block body %}
     {% if all_cards %}
-    <h2>Cards for sale</h2>
+    <h2 class="basic-text">Cards for sale</h2>
         <ul>
             {% for card in all_cards %}
-            <li><a href="{% url 'Magic:card_detail' card.id %}">{{card.name}}</a>
+            <li class="basic-text"><a href="{% url 'Magic:card_detail' card.id %}">{{card.name}}</a>
                 | Price: {{card.price}} | Seller: {{card.user}}</li>  
             {% endfor %}
         </ul>

@@ -1,11 +1,13 @@
 from django.db import models
 from django.db.models import Count
+from django.urls import reverse
 
 
 class User(models.Model):
     name = models.CharField(max_length = 250)
     email_address = models.CharField(max_length = 500)
     #available_cards = models.IntegerField()
+
 
     def __str__ (self):
         return self.name# + " - Cards for sale: " + str(self.available_cards)#str(Card.objects.annotate(total=Count('user')))
@@ -19,6 +21,9 @@ class Card(models.Model):
     price = models.IntegerField()
     #amount = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def get_absolute_url(self):
+        return reverse('Magic:user_detail', kwargs={'user_id': self.user.id})
 
     @classmethod
     def user_cards(self):
