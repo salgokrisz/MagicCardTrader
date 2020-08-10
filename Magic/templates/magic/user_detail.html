@@ -1,6 +1,7 @@
 {% extends 'magic/base.html' %}
 
 {% block body %}
+
     <h5 class="basic-text"><a href="{% url 'Magic:users' %}">Back to Users</a></h5>
     <h2 class="basic-text">User Details</h2>
 
@@ -9,14 +10,11 @@
     <ul>
         {% for card in user.card_set.all %}
         <li class="basic-text">
-            <a href="{% url 'Magic:card_detail' card.id %}" >{{ card.name }}</a> - Price: {{card.price}}
-            <form action="{% url 'Magic:card_delete' card.id %}" method="POST" style="display: inline;">
-                {% csrf_token %}
-                <input type="hidden" name="card_id" value="{{card.id}}">
-                <button class="btn btn-default btn-sm btn-user-detail" type="submit">
-                    <span class="glyphicon glyphicon-trash"></span>
-                </button>
-            </form>
+            <a href="{% url 'Magic:card_detail' card.id %}" >{{ card.name }}</a>
+            - Price: {{card.price}}
+            {% if card.is_foil %}
+               | <span class="glyphicon glyphicon-star"> Foil</span>
+            {% endif %}
         </li>
         {% endfor %}
     </ul>

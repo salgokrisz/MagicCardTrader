@@ -18,7 +18,8 @@ body{
 }
 
 .basic-text{
-    color: burlywood;
+    color: lightblue;
+    font-weight: bold;
 }
 
 .btn-user-detail{
@@ -28,4 +29,8 @@ body{
 
 .glyphicon-trash{
     color: red;
+}
+
+.cards-header{
+    border-bottom: 50ptx;
 }

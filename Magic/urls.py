@@ -22,10 +22,12 @@ urlpatterns = [
     # /cards/add
     re_path(r'^cards/add/$', views.CardCreate.as_view(), name="card_add"),
     # cards/edit
-    re_path(r'^cards/(?P<card_id>[0-9]+)/$', views.CardUpdate.as_view(), name="card_update"),
+    re_path(r'^cards/(?P<pk>[0-9]+)/edit/$', views.CardUpdate.as_view(), name="card_update"),
     # cards/delete
-     re_path(r'^cards/(?P<card_id>[0-9]+)/delete/$', views.CardDelete.as_view(), name="card_delete"),
+     re_path(r'^cards/(?P<pk>[0-9]+)/delete/$', views.CardDelete.as_view(), name="card_delete"),
 
     #/about/
     path('about/', views.about, name='about'),
+
+    re_path(r'^register/$', views.UserFormView.as_view(), name='register'),
 ]

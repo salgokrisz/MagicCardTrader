@@ -1,12 +1,14 @@
 from django.db import models
 from django.db.models import Count
 from django.urls import reverse
+from mtgsdk import Card
 
 
 class User(models.Model):
     name = models.CharField(max_length = 250)
     email_address = models.CharField(max_length = 500)
     #available_cards = models.IntegerField()
+    user_photo = models.FileField(upload_to='profile_images', default='profile_images/Magic_card_back.jpg')
 
 
     def __str__ (self):
@@ -14,13 +16,23 @@ class User(models.Model):
 
 
 
+def get_image_url(name, set_name):
+        listOfVersions = []
+        versions = Card.where(name=name, set=set_name).all()
+        for card in versions:
+            listOfVersions.append(card.image_url)
+        listOfVersions = list(dict.fromkeys(listOfVersions))
+        print(listOfVersions)
+        return listOfVersions
 
 class Card(models.Model):
     name = models.CharField(max_length = 150)
     set_name = models.CharField(max_length = 150)
     price = models.IntegerField()
-    #amount = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_foil = models.BooleanField(default=False)
+    imageUrl = models.TextField(default=get_image_url(name, set_name))
+
 
     def get_absolute_url(self):
         return reverse('Magic:user_detail', kwargs={'user_id': self.user.id})
