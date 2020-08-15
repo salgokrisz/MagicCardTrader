@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-from .models import User
+#from .models import User
 from .models import Card
 from django.template import loader
 from django.views import generic
@@ -11,6 +11,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.views.generic import View
 from .forms import UserForm
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 #generic views but neet to figure out how these work
 #class indexView(generic.ListView):
@@ -69,9 +71,9 @@ def user_detail(request, user_id):
     except User.DoesNotExist:
         raise Http404("User does not exist")
     context = {
-       'user': user,
-       'card': card,
-       'nbar': 'users',
+        'user': user,
+        'card': card,
+        'nbar': 'users',
 
     }
     return HttpResponse(template.render(context, request))
@@ -108,6 +110,7 @@ def card_detail(request, card_id):
 def about(request):
     return HttpResponse('<h3>Magic Card Trader About</h3>')
 
+
 class CardCreate(CreateView):
     model = Card
     fields = ['name', 'set_name', 'price', 'user', 'is_foil']
@@ -119,6 +122,7 @@ class CardUpdate(UpdateView):
     model = Card
     fields = ['name', 'set_name', 'price', 'user', 'is_foil']
     #form = self.form_class(Card.name, Card.set_name, Card.price, Card.user, Card.is_foil)
+
 
 class CardDelete(DeleteView):
     model = Card
@@ -147,8 +151,6 @@ class UserFormView(View):
             email = form.cleaned_data['email']
             user.set_password(password)
             user.save()
-            new_user = User(name=username, email_address=email)
-            new_user.save()
 
             # returns user objects if credentials are correct
             user = authenticate(username=username, password=password)

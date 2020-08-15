@@ -1,0 +1,19 @@
+<!--add new card here-->
+{% extends 'magic/base.html' %}
+{% block title %} Create a New Account {% endblock %}
+{% block cards_active %} active {% endblock %}
+
+{% block body %}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h2>You have been logged out!</h2>
+        <div class="container-fluid">
+            <div class="border-top pt-3">
+                <small class="text-muted">
+                    <a href="{% url 'login' %}">Log in again</a>
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

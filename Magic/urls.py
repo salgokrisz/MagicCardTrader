@@ -2,6 +2,7 @@ from django.urls import path, re_path
 from . import views
 
 
+
 app_name = 'Magic'
 urlpatterns = [
     # /home/
@@ -30,4 +31,5 @@ urlpatterns = [
     path('about/', views.about, name='about'),
 
     re_path(r'^register/$', views.UserFormView.as_view(), name='register'),
+    
 ]

@@ -9,16 +9,16 @@
             <div class="col-sm-4 col-lg-2">
                 <!--user profile image-->
                 <a href="{% url 'Magic:user_detail' user.id %}">
-                    <img src="{{ user.user_photo.url }}" class="img-responsive" width=50%>
+                    <img src="{{ user.profile.user_photo.url }}" class="img-responsive" width=50%>
                 </a>
                 <div class="caption">
-                    <h2 class="basic-text"><a href="{% url 'Magic:user_detail' user.id %}">{{user.name}}</a></h2>
+                    <h2 class="basic-text"><a href="{% url 'Magic:user_detail' user.id %}">{{user.get_username}}</a></h2>
                     <h4 class="basic-text">Available Cards: {{user.card_set.count}}</h4>
                 </div>
             </div>
             {% endfor %}
     {% else %}
-        <h4 class="basic-text">No users registered yet. Click <a href="{% url 'Magic:register' %}">here</a> to register</h4>
+        <h4 class="basic-text">No users registered yet. Click <a href="{% url 'register' %}">here</a> to register</h4>
     {% endif %}
 
 </div>

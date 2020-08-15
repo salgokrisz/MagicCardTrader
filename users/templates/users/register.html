@@ -1,0 +1,34 @@
+<!--add new card here-->
+{% extends 'magic/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Create a New Account {% endblock %}
+{% block cards_active %} active {% endblock %}
+
+{% block body %}
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="container-fluid">
+            <form class="form-horizontal" action="" method="POST">
+                {% csrf_token %}
+                <fieldset>
+                    <legend class="border-bottom mb-4">
+                        Register
+                    </legend>
+                    {{ form|crispy }}
+                </fieldset>
+                <div class="form-group">
+                    <button class="btn btn-success" type="submit">
+                        Sign Up
+                    </button>
+                </div>
+            </form>
+            <div class="border-top pt-3">
+                <small class="text-muted">
+                    Already have an account? <a class="ml-2" href="{% url 'login' %}">Sign In</a>
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

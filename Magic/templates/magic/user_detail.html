@@ -2,10 +2,10 @@
 
 {% block body %}
 
-    <h5 class="basic-text"><a href="{% url 'Magic:users' %}">Back to Users</a></h5>
+    <h5 class="basic-text"><a href="{% url 'Magic:users' %}">Back to all users</a></h5>
     <h2 class="basic-text">User Details</h2>
 
-    <h3 class="basic-text">Name: {{user.name}} </h3>
+    <h3 class="basic-text">Name: {{user.get_username}} </h3>
     <h4 class="basic-text">Available Cards {{user.card_set.count}} </h4>
     <ul>
         {% for card in user.card_set.all %}

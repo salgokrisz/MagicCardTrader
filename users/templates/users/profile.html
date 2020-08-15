@@ -1,0 +1,21 @@
+{% extends 'magic/base.html' %}
+
+{% block title %} Profile {% endblock %}
+
+{% block body %}
+<h3 class="basic-text">Name: {{user.username}} </h3>
+<ul>
+    {% for card in user.card_set.all %}
+    <li class="basic-text">
+        <a href="{% url 'Magic:card_detail' card.id %}" >{{ card.name }}</a>
+        - Price: {{card.price}}
+        {% if card.is_foil %}
+           | <span class="glyphicon glyphicon-star"> Foil</span>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'Magic:card_add' %}">
+    <small>Add card</small>
+</a>
+{% endblock %}
