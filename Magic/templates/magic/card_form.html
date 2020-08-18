@@ -12,9 +12,11 @@
                     <form class="form-horizontal" action="" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         {% include 'magic/from-template.html' %}
+                        <!--<label class="control-label col-sm-2" for="user">User: </label>
+                        <div class="col-sm-10">{{ request.user }}</div>-->
                         <div class="from-group">
                             <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-success">Submiit</button>
+                                <button type="submit" class="btn btn-success pt-4 margin-top-4">Submiit</button>
                             </div>
 
                         </div>

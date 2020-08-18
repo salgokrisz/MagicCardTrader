@@ -13,6 +13,7 @@ from django.views.generic import View
 from .forms import UserForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from Magic.forms import CardForm
 
 #generic views but neet to figure out how these work
 #class indexView(generic.ListView):
@@ -110,13 +111,23 @@ def card_detail(request, card_id):
 def about(request):
     return HttpResponse('<h3>Magic Card Trader About</h3>')
 
-
 class CardCreate(CreateView):
     model = Card
-    fields = ['name', 'set_name', 'price', 'user', 'is_foil']
+    form_class = CardForm
+    #exclude = ['user']
+    #user_list = User.objects.get(user=request.user)
+    #fields = ['name', 'set_name', 'price', 'is_foil']
     context = {
         'nbar': 'add_cards',
     }
+    '''def form_valid(self, form):
+        card = form.save(commit=False)
+        card.user = User.objects.get(user=self.request.user)
+        card.save()
+        return HttpResponseRedirect(self.get_success_url())'''
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 class CardUpdate(UpdateView):
     model = Card
@@ -138,20 +149,13 @@ class UserFormView(View):
         form = self.form_class(None)
         return render(request, self.template_name, {'form': form})
 
+
     # process form data, add user to database
     def post(self, request):
         form = self.form_class(request.POST)
 
         if form.is_valid():
             user = form.save(commit=False)
-
-            # cleaned (normalitzed) data
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            email = form.cleaned_data['email']
-            user.set_password(password)
-            user.save()
-
             # returns user objects if credentials are correct
             user = authenticate(username=username, password=password)
 
@@ -161,6 +165,7 @@ class UserFormView(View):
                     return redirect('Magic:index')
         
         return render(request, self.template_name, {'form': form})
+
 
 
 

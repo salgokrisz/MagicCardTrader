@@ -39,7 +39,7 @@ def get_image_url(name, set_name):
 class Card(models.Model):
     name = models.CharField(max_length = 150)
     set_name = models.CharField(max_length = 150)
-    price = models.IntegerField()
+    price = models.FloatField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     is_foil = models.BooleanField(default=False)
     #imageUrl = models.TextField(default=get_image_url(name, set_name))
