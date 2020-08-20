@@ -9,7 +9,7 @@ from django.db.models.signals import post_save
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
-    user_photo = models.FileField(upload_to='profile_images', default='profile_images/Magic_card_back.jpg')
+    user_photo = models.FileField(upload_to='profile_images', default='profile_images/default-profile-picture.jpg')
     date_registered = models.DateTimeField(auto_now_add=True, blank=True)
     address = models.TextField()
 
@@ -23,7 +23,7 @@ class Profile(models.Model):
         instance.profile.save() 
 
     def __str__ (self):
-        return self.name# + " - Cards for sale: " + str(self.available_cards)#str(Card.objects.annotate(total=Count('user')))
+        return self.user.username# + " - Cards for sale: " + str(self.available_cards)#str(Card.objects.annotate(total=Count('user')))
 
 
 '''

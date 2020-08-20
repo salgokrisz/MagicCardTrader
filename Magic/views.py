@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.views.generic import View
-from .forms import UserForm
+#from .forms import UserForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from Magic.forms import CardForm
@@ -114,17 +114,9 @@ def about(request):
 class CardCreate(CreateView):
     model = Card
     form_class = CardForm
-    #exclude = ['user']
-    #user_list = User.objects.get(user=request.user)
-    #fields = ['name', 'set_name', 'price', 'is_foil']
     context = {
         'nbar': 'add_cards',
     }
-    '''def form_valid(self, form):
-        card = form.save(commit=False)
-        card.user = User.objects.get(user=self.request.user)
-        card.save()
-        return HttpResponseRedirect(self.get_success_url())'''
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -139,6 +131,7 @@ class CardDelete(DeleteView):
     model = Card
     success_url = reverse_lazy('Magic:cards')
 
+'''
 class UserFormView(View):
     form_class = UserForm
     template_name = 'magic/registration_form.html'
@@ -165,7 +158,7 @@ class UserFormView(View):
                     return redirect('Magic:index')
         
         return render(request, self.template_name, {'form': form})
-
+'''
 
 
 

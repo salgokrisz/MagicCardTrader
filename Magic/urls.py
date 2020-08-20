@@ -1,5 +1,6 @@
 from django.urls import path, re_path
 from . import views
+from users import views as UsersView
 
 
 
@@ -30,6 +31,9 @@ urlpatterns = [
     #/about/
     path('about/', views.about, name='about'),
 
-    re_path(r'^register/$', views.UserFormView.as_view(), name='register'),
+    #re_path(r'^register/$', views.UserFormView.as_view(), name='register'),
+
+    re_path(r'^register/$', UsersView.register, name="register"),
+    re_path(r'^update_profile/$', UsersView.update_profile, name="update_profile"),
     
 ]

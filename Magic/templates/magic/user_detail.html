@@ -5,17 +5,31 @@
     <h5 class="basic-text"><a href="{% url 'Magic:users' %}">Back to all users</a></h5>
     <h2 class="basic-text">User Details</h2>
 
-    <h3 class="basic-text">Name: {{user.get_username}} </h3>
-    <h4 class="basic-text">Available Cards {{user.card_set.count}} </h4>
-    <ul>
-        {% for card in user.card_set.all %}
-        <li class="basic-text">
-            <a href="{% url 'Magic:card_detail' card.id %}" >{{ card.name }}</a>
-            - Price: {{card.price}}
-            {% if card.is_foil %}
-               | <span class="glyphicon glyphicon-star"> Foil</span>
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
+    <div class="content-box">
+        <div class="media-body">
+            <div class="panel-body">
+                <img class="img-rounded img-responsive" src="{{ user.profile.user_photo.url }}" width=200px>
+                <h2 class="account-heading basic-text">Name: {{ user.get_username }} </h2>
+                <p class="text-secondary basic-text">Email: {{ user.email }} </p>
+                {% if user.profile.address %}
+                    <p class="text-secondary basic-text">Address: {{ user.profile.address }}</p>
+                {% else %}
+                    <p class="text-secondary basic-text">Address: No address set</p>
+                {% endif %}
+                <p class="small basic-text">Member since: {{ user.profile.date_registered | date:"M d, Y" }}</p>
+                <p class="text-secondary basic-text">Available Cards {{ user.card_set.count }} </p>
+                <ul>
+                    {% for card in user.card_set.all %}
+                    <li class="basic-text">
+                        <a href="{% url 'Magic:card_detail' card.id %}" >{{ card.name }}</a>
+                        - Price: {{card.price}}
+                        {% if card.is_foil %}
+                           | <span class="glyphicon glyphicon-star"> Foil</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 {% endblock %}

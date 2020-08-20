@@ -1,21 +1,47 @@
 {% extends 'magic/base.html' %}
-
+{% load crispy_forms_tags %}
 {% block title %} Profile {% endblock %}
 
 {% block body %}
-<h3 class="basic-text">Name: {{user.username}} </h3>
-<ul>
-    {% for card in user.card_set.all %}
-    <li class="basic-text">
-        <a href="{% url 'Magic:card_detail' card.id %}" >{{ card.name }}</a>
-        - Price: {{card.price}}
-        {% if card.is_foil %}
-           | <span class="glyphicon glyphicon-star"> Foil</span>
-        {% endif %}
-    </li>
-    {% endfor %}
-</ul>
-<a href="{% url 'Magic:card_add' %}">
-    <small>Add card</small>
-</a>
+<div class="content-box paanel panel-default">
+    <div class="media-body">
+        <div class="panel-body">
+            <div class="container-fluid">
+                <img class="img-rounded img-responsive" src="{{ user.profile.user_photo.url }}" width=200px>
+                <h2 class="account-heading basic-text">Name: {{ user.get_username }} </h2>
+                <p class="text-secondary basic-text">Email: {{ user.email }} </p>
+                {% if user.profile.address %}
+                    <p class="text-secondary basic-text">Address: {{ user.profile.address }}</p>
+                {% else %}
+                    <p class="text-secondary basic-text">Address: No address set -<a href="{% url 'Magic:update_profile' %}"> Set now!</a></p>
+                {% endif %}
+        
+                <p class="text-secondary basic-text">Available Cards {{ user.card_set.count }} </p>
+                <ul>
+                    {% for card in user.card_set.all %}
+                    <li class="basic-text">
+                        <a href="{% url 'Magic:card_detail' card.id %}" >{{ card.name }}</a>
+                        - Price: {{card.price}}
+                        {% if card.is_foil %}
+                        | <span class="glyphicon glyphicon-star"> Foil</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+                <a href="{% url 'Magic:card_add' %}">
+                    <button class="btn btn-warning">
+                        <small>Add card</small>
+                    </button>
+                </a>
+                <a href="{% url 'Magic:update_profile' %}">
+                    <button class="btn btn-danger" type="submit">
+                        <small>Update Profile</small>
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {% endblock %}

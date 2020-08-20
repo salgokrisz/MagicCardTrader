@@ -1,0 +1,46 @@
+<!--update profile here -->
+{% extends 'magic/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Create a New Account {% endblock %}
+{% block cards_active %} active {% endblock %}
+
+{% block body %}
+<div class="content-box paanel panel-default">
+    <div class="media-body">
+        <div class="panel-body">
+            <div class="container-fluid">
+                <img class="img-rounded img-responsive" src="{{ user.profile.user_photo.url }}" width=200px>
+                <h2 class="account-heading basic-text">Name: {{ user.get_username }} </h2>
+                <p class="text-secondary basic-text">Email: {{ user.email }} </p>
+                {% if user.profile.address %}
+                    <p class="text-secondary basic-text">Address: {{ user.profile.address }}</p>
+                {% else %}
+                    <p class="text-secondary basic-text">Address: No address set -<a href="#"> Set now!</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="container-fluid">
+            <form class="form-horizontal" action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <fieldset>
+                    <legend class="border-bottom mb-4">
+                        Update Profile
+                    </legend>
+                    {{ u_form|crispy }}
+                    {{ p_form|crispy }}
+                </fieldset>
+                <div class="form-group">
+                    <button class="btn btn-success" type="submit">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
