@@ -5,18 +5,27 @@
 <div class=""> <!--class="row"-->
     {% if all_users %}
     <h1 class="basic-text">Users</h2>
+        <table id="user-table">
+            <tr>
+                <th><h2><span class="glyphicon glyphicon-user"></span></h2></th>
+                <th><h2>Name</h2></th>
+                <th><h2>Available Cards</h2></th>
+            </tr>
             {% for user in all_users %}
-            <div class="col-sm-4 col-lg-2">
-                <!--user profile image-->
-                <a href="{% url 'Magic:user_detail' user.id %}">
-                    <img src="{{ user.profile.user_photo.url }}" class="img-responsive" width=50%>
-                </a>
-                <div class="caption">
-                    <h2 class="basic-text"><a href="{% url 'Magic:user_detail' user.id %}">{{user.get_username}}</a></h2>
-                    <h4 class="basic-text">Available Cards: {{user.card_set.count}}</h4>
-                </div>
-            </div>
+            <tr>
+                    <!--user profile image-->
+                    <td class="img-td user-img-td">
+                        <img src="{{ user.profile.user_photo.url }}" class="img-responsive" width=25%>
+                    </td>                  
+                    <td class="user-td">
+                        <h3><b><a class="user-td-link" href="{% url 'Magic:user_detail' user.id %}">{{user.get_username}}</a></b></h3>
+                    </td>
+                    <td>
+                        Available Cards: {{user.card_set.count}}
+                    </td>                
+            </tr>
             {% endfor %}
+        </table>
     {% else %}
         <h4 class="basic-text">No users registered yet. Click <a href="{% url 'register' %}">here</a> to register</h4>
     {% endif %}

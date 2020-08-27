@@ -3,25 +3,39 @@
 {% block body %}
     {% if all_cards %}
     <h1 class="basic-text cards-header">Cards for sale</h1>
-
-            {% for card in all_cards %}
-            <div class="col-sm-4 col-lg-2 basic-text">
-                <a href="{% url 'Magic:card_detail' card.id %}">
-                    <img src="#" class="img-responsive" width="30%">
-                </a>
-                <div class="caption">
-                    <h4><a href="{% url 'Magic:card_detail' card.id %}">{{card.name}}</a>
-                    | Price: {{card.price}} | Seller: {{card.user}}  
+    <table id="card-table">
+        <tr>
+            <th><span class="glyphicon glyphicon-camera"></span></th>
+            <th>Card Name</th>
+            <th>Price</th>
+            <th>Seller</th>
+            <th>Foil</th>
+        </tr>
+        {% for card in all_cards %}
+            <tr>
+                <td class="img-td">
+                    <span class="glyphicon glyphicon-camera"></span>
+                    <img src="#" class="img-responsive  card-img-td" width="30%">
+                </td>
+                <td>
+                    <a class="card-td-link" href="{% url 'Magic:card_detail' card.id %}">{{card.name}}</a>
+                </td>
+                <td class="price-td">
+                    {{card.price}}
+                </td>
+                <td class="seller-td">
+                    <a class="user-td-link" href="{% url 'Magic:user_detail' user.id %}">{{card.user}}</a>
+                </td>
+                <td>
                     {% if card.is_foil %}
-                    | <span class="glyphicon glyphicon-star"> Foil</span>
-                </h4>
+                        <span class="glyphicon glyphicon-star"></span>
                     {% endif %}
-
-                </div>
-            </div>
-            {% endfor %}
-
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
     {% else %}
         <h3 class="basic-text">No cards available for sale</h3>
     {% endif %}
+    
 {% endblock %}

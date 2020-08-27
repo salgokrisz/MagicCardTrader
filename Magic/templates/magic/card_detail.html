@@ -15,13 +15,12 @@
             No
         {% endif %}
     </h3>
-
-
     <h4 class="basic-text">Seller: <a href="{% url 'Magic:user_detail' card.user.id %}">{{card.user}}</a> </h3>
+    {% if request.user == card.user %}
     <form action="{% url 'Magic:card_update' card.id %}" method="POST" style="display: inline;">
         {% csrf_token %}
         <input type="hidden" name="card_id" value="{{card.id}}"/>
-        <button class="btn btn-default btn-sm" type="submit">
+        <button class="btn btn-secondary btn-sm" type="submit">
             <span class="glyphicon glyphicon-edit">
                 Edit
             </span>
@@ -36,4 +35,5 @@
             </span>
         </button>
     </form>
+    {% endif %}
 {% endblock %}

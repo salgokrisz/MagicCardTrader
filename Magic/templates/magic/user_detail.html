@@ -17,7 +17,7 @@
                     <p class="text-secondary basic-text">Address: No address set</p>
                 {% endif %}
                 <p class="small basic-text">Member since: {{ user.profile.date_registered | date:"M d, Y" }}</p>
-                <p class="text-secondary basic-text">Available Cards {{ user.card_set.count }} </p>
+                <p class="text-secondary basic-text">Available Cards: {{ user.card_set.count }} </p>
                 <ul>
                     {% for card in user.card_set.all %}
                     <li class="basic-text">

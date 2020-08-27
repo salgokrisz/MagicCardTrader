@@ -52,7 +52,7 @@
                         {% if request.user.is_authenticated %}
                             <li class="{% if nbar == 'profile' %} active {% endif %}">
                                 <a href="{% url 'profile' %}">
-                                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; Profile
+                                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; {{ request.user }}'s Profile
                                 </a>
                             </li>
                             <li class="{% if nbar == 'add_cards' %} active {% endif %}">

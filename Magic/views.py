@@ -10,6 +10,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.views.generic import View
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 #from .forms import UserForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -111,7 +112,7 @@ def card_detail(request, card_id):
 def about(request):
     return HttpResponse('<h3>Magic Card Trader About</h3>')
 
-class CardCreate(CreateView):
+class CardCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Card
     form_class = CardForm
     context = {
@@ -121,15 +122,26 @@ class CardCreate(CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-class CardUpdate(UpdateView):
+class CardUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Card
     fields = ['name', 'set_name', 'price', 'user', 'is_foil']
     #form = self.form_class(Card.name, Card.set_name, Card.price, Card.user, Card.is_foil)
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.user:
+            return True
+        return False
 
 
-class CardDelete(DeleteView):
+class CardDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Card
     success_url = reverse_lazy('Magic:cards')
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.user:
+            return True
+        return False
 
 '''
 class UserFormView(View):
