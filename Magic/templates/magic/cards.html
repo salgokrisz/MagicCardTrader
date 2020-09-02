@@ -2,40 +2,63 @@
 {% block title %} Cards for sale  {% endblock %}
 {% block body %}
     {% if all_cards %}
-    <h1 class="basic-text cards-header">Cards for sale</h1>
-    <table id="card-table">
-        <tr>
-            <th><span class="glyphicon glyphicon-camera"></span></th>
-            <th>Card Name</th>
-            <th>Price</th>
-            <th>Seller</th>
-            <th>Foil</th>
-        </tr>
-        {% for card in all_cards %}
+        <h1 class="basic-text cards-header">Cards for sale</h1>
+        <table id="card-table">
             <tr>
-                <td class="img-td">
-                    <span class="glyphicon glyphicon-camera"></span>
-                    <img src="#" class="img-responsive  card-img-td" width="30%">
-                </td>
-                <td>
-                    <a class="card-td-link" href="{% url 'Magic:card_detail' card.id %}">{{card.name}}</a>
-                </td>
-                <td class="price-td">
-                    {{card.price}}
-                </td>
-                <td class="seller-td">
-                    <a class="user-td-link" href="{% url 'Magic:user_detail' user.id %}">{{card.user}}</a>
-                </td>
-                <td>
-                    {% if card.is_foil %}
-                        <span class="glyphicon glyphicon-star"></span>
-                    {% endif %}
-                </td>
+                <th><span class="glyphicon glyphicon-camera"></span></th>
+                <th>Card Name</th>
+                <th>Seller</th>
+                <th>Price</th>
             </tr>
-        {% endfor %}
-    </table>
+            {% for card in cards %}
+                <tr>
+                    <td class="img-td">
+                        <span class="glyphicon glyphicon-camera"></span>
+                        <img src="#" class="img-responsive  card-img-td" width="30%">
+                    </td>
+                    <td>
+                        <a class="card-td-link" href="{% url 'Magic:card_detail' card.id %}">{{card.name}}</a>
+                        {% if card.is_foil %}
+                            <span class="glyphicon glyphicon-star"></span>
+                        {% endif %}
+                    </td>
+                    <td class="seller-td">
+                        <a class="user-td-link" href="{% url 'Magic:user_detail' user.id %}">{{card.user}}</a>
+                    </td>
+                    <td class="price-td">
+                        {{card.price}}
+                        <button type="button" class="btn btn-default btn-sm btn-cart">
+                            <span class="glyphicon glyphicon-shopping-cart"></span>
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="center">
+            {% if cards.has_other_pages %}
+                <ul class="pagination">
+                    {% if cards.has_previous %}
+                        <li><a href="?page={{ cards.previous_page_number }}">&laquo;</a></li>
+                    {% else %}
+                        <li class="disabled"><span>&laquo;</span></li>
+                    {% endif %}
+                    {% for i in cards.paginator.page_range %}
+                        {% if cards.number == i %}
+                            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                        {% else %}
+                            <li><a href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if cards.has_next %}
+                        <li><a href="?page={{ cards.next_page_number }}">&raquo;</a></li>
+                    {% else %}
+                        <li class="disabled"><span>&raquo;</span></li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        </div>
     {% else %}
-        <h3 class="basic-text">No cards available for sale</h3>
+            <h3 class="basic-text">No cards available for sale</h3>
     {% endif %}
     
 {% endblock %}

@@ -56,11 +56,19 @@ th, td{
 
 
 #user-table tr:nth-child(even), #card-table tr:nth-child(even){
-    background-color: lightblue;
-}
-#user-table tr:nth-child(odd), #card-table tr:nth-child(odd){
     background-color: steelblue;
 }
+#user-table tr:nth-child(odd), #card-table tr:nth-child(odd){
+    background-color: lightblue;
+}
+
+#card-table tr:nth-child(even), #card-table tr:nth-child(even){
+    background-color: steelblue;
+}
+#card-table tr:nth-child(odd), #card-table tr:nth-child(odd){
+    background-color: lightblue;
+}
+
 .img-td{
     width: 10%;
 }
@@ -89,4 +97,14 @@ th, td{
 .card-img:hover{
     display: inline;
     z-index: 100;
+}
+.center{
+    text-align: center;
+}
+
+.btn-cart{
+    float: right;
+    margin-right: 25px;
+    padding-left: 15px;
+    padding-right: 15px;
 }

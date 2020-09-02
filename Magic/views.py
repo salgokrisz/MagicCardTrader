@@ -1,20 +1,18 @@
-from django.http import Http404
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
-#from .models import User
 from .models import Card
+from Magic.forms import CardForm
+from django.http import Http404
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
 from django.template import loader
-from django.views import generic
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views import generic
 from django.views.generic import View
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-#from .forms import UserForm
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from Magic.forms import CardForm
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 #generic views but neet to figure out how these work
 #class indexView(generic.ListView):
@@ -56,9 +54,18 @@ def index(request):
 
 def users(request):
     all_users = User.objects.all()
+    page = request.GET.get('page', 1)
     template = loader.get_template('magic/users.html')
+    paginator = Paginator(all_users, 7)
+    try:
+        users = paginator.page(page)
+    except PageNotAnInteger:
+        users = paginator.page(1)
+    except EmptyPage:
+        users = paginator.page(paginator.num_pages)
     context = {
        'all_users': all_users,
+       'users': users,
        'nbar': 'users',
 
     }
@@ -87,11 +94,22 @@ def user_detail(request, user_id):
 
 def cards(request):
     all_cards = Card.objects.all()
+    page = request.GET.get('page', 1)
     template = loader.get_template('magic/cards.html')
+    paginator = Paginator(all_cards, 7)
+    try:
+        cards = paginator.page(page)
+    except PageNotAnInteger:
+        cards = paginator.page(1)
+    except EmptyPage:
+        cards = paginator.page(paginator.num_pages)
+    
     context = {
         'all_cards': all_cards,
+        'cards': cards,
         'nbar':'cards',
     }
+
     return HttpResponse(template.render(context, request))
 
 def card_detail(request, card_id):
@@ -118,6 +136,11 @@ class CardCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     context = {
         'nbar': 'add_cards',
     }
+    def test_func(self):
+        if self.request.user:
+            return True
+        else:
+            return False
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
