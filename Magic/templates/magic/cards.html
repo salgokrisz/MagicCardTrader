@@ -24,7 +24,7 @@
                     {{card.price}}
                 </td>
                 <td class="seller-td">
-                    <a class="user-td-link" href="{% url 'Magic:user_detail' user.id %}">{{card.user}}</a>
+                    <a class="user-td-link" href="{% url 'Magic:user_detail' card.user.id %}">{{card.user}}</a>
                 </td>
                 <td>
                     {% if card.is_foil %}
