@@ -5,31 +5,10 @@
         <h1 class="basic-text cards-header">Cards for sale</h1>
         <table id="card-table">
             <tr>
-<<<<<<< HEAD
                 <th><span class="glyphicon glyphicon-camera"></span></th>
                 <th>Card Name</th>
                 <th>Seller</th>
                 <th>Price</th>
-=======
-                <td class="img-td">
-                    <span class="glyphicon glyphicon-camera"></span>
-                    <img src="#" class="img-responsive  card-img-td" width="30%">
-                </td>
-                <td>
-                    <a class="card-td-link" href="{% url 'Magic:card_detail' card.id %}">{{card.name}}</a>
-                </td>
-                <td class="price-td">
-                    {{card.price}}
-                </td>
-                <td class="seller-td">
-                    <a class="user-td-link" href="{% url 'Magic:user_detail' card.user.id %}">{{card.user}}</a>
-                </td>
-                <td>
-                    {% if card.is_foil %}
-                        <span class="glyphicon glyphicon-star"></span>
-                    {% endif %}
-                </td>
->>>>>>> 76e14fec1e5aab3085a01bf21bbe84391e0fd3c2
             </tr>
             {% for card in cards %}
                 <tr>
