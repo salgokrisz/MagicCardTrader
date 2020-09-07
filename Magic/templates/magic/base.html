@@ -60,6 +60,11 @@
                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Add Cards
                                 </a>
                             </li>
+                            <li class="{% if nbar == 'order-summary' %} active {% endif %}">
+                                <a href="{% url 'Magic:order_summary' %}">
+                                    <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp; View Cart
+                                </a>
+                            </li>
                             <li class="">
                                 <a href="{% url 'logout' %}">
                                     <span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp; Logout

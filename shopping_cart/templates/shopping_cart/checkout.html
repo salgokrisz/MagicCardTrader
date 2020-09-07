@@ -1,0 +1,32 @@
+{% extends 'magic/base.html' %}
+
+{% block body %}
+
+<table id="card-table">
+<tr>
+  <td><h4>Order Summary</h4></td>
+</tr>
+
+
+    {% for item in order.get_cart_items %}
+    <tr>
+      <td>{{ item }}</td>
+      <td>{{ item.card.price }}</td>
+    </tr>
+    {% endfor %}
+
+
+<tr>
+  <td><strong>Order Total</strong></td>
+  <td><strong>{{ order.get_cart_total }}</strong></td>
+</tr>
+</table>
+<form action="{% url 'Magic:process_payment' order.id %}" method="POST">
+  {% csrf_token %}
+  <button class="btn btn-warning btn-sm">Pay with card</button>
+</form>
+<form action="{% url 'Magic:process_payment' order.id %}" method="POST">
+  {% csrf_token %}
+  <button class="btn btn-primary btn-sm">Pay with PayPal</button>
+</form>
+{% endblock %}
