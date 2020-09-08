@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from Magic.models import Profile, Card
@@ -8,6 +9,7 @@ from shopping_cart.models import OrderItem, Order, Transaction
 from shopping_cart.extras import generate_order_id#, transaction, generate_client_token
 import datetime
 import stripe
+import users
 
 #stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -26,6 +28,8 @@ def add_to_cart(request, **kwargs):
     # create order associated with the user
     user_order, status = Order.objects.get_or_create(owner=user_profile, is_ordered=False)
     user_order.items.add(order_item)
+    setattr(card, "is_ordered", True)
+    card.save()
     if status:
         # generate a reference code
         user_order.ref_code = generate_order_id()
@@ -39,6 +43,10 @@ def add_to_cart(request, **kwargs):
 @login_required()
 def delete_from_cart(request, item_id):
     item_to_delete = OrderItem.objects.filter(pk=item_id)
+    card_id = OrderItem.objects.get(pk=item_id).card.id
+    card = Card.objects.get(pk=card_id)
+    setattr(card, "is_ordered", False)
+    card.save()
     if item_to_delete.exists():
         item_to_delete[0].delete()
         messages.info(request, "Item has been deleted")
@@ -127,7 +135,7 @@ def checkout(request, **kwargs):
 
     return render(request, 'shopping_cart/checkout.html', context) """
 
-@login_required()
+""" @login_required()
 def update_transaction_records(request, token):
     # get the order being processed
     order_to_purchase = get_user_pending_order(request)
@@ -164,8 +172,36 @@ def update_transaction_records(request, token):
     # send an email to the customer
     # look at tutorial on how to send emails with sendgrid
     messages.info(request, "Thank you! Your purchase was successful!")
-    return redirect(reverse('users:profile'))
+    return redirect(reverse('users:profile')) """
 
+
+def update_transaction_records(request, order_id):
+    # get the order being processed
+    order_to_purchase = Order.objects.filter(pk=order_id).first()
+
+    # update the placed order
+    order_to_purchase.is_ordered=True
+    order_to_purchase.date_ordered=datetime.datetime.now()
+    order_to_purchase.save()
+    
+    # get all items in the order - generates a queryset
+    order_items = order_to_purchase.items.all()
+    # update order items
+    order_items.update(is_ordered=True, date_ordered=datetime.datetime.now())
+
+    # Add cards to user profile
+    user_profile = get_object_or_404(Profile, user=request.user)
+    # get the cards from the items
+    """ for item in order_items:
+        card_id = item.card.id
+        card = Card.objects.get(pk=card_id)
+ """
+        
+    order_cards = [item.card for item in order_items]
+    user_profile.user.card_set.add(*order_cards)
+    user_profile.save()
+    messages.info(request, "Thank you! Your purchase was successful!")
+    return redirect(reverse('users:profile'))
 
 def success(request, **kwargs):
     # a view signifying the transcation was successful

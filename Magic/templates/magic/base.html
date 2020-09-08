@@ -62,7 +62,7 @@
                             </li>
                             <li class="{% if nbar == 'order-summary' %} active {% endif %}">
                                 <a href="{% url 'Magic:order_summary' %}">
-                                    <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp; View Cart
+                                    <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp; View Cart {% if order.get_cart_total > 0 %}(${{ order.get_cart_total }}) {% endif %}
                                 </a>
                             </li>
                             <li class="">

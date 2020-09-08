@@ -42,6 +42,7 @@ class Card(models.Model):
     price = models.FloatField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     is_foil = models.BooleanField(default=False)
+    is_ordered = models.BooleanField(default=False)
     #imageUrl = models.TextField(default=get_image_url(name, set_name))
 
 

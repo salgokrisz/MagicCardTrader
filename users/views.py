@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+from shopping_cart.views import get_user_pending_order
 
 
 def register(request):
@@ -24,13 +25,16 @@ def register(request):
 
 @login_required
 def profile(request):
+    existing_order = get_user_pending_order(request)
     context = {
         'nbar': 'profile',
+        'order': existing_order,
     }
     return render(request, 'users/profile.html', context)
 
 @login_required
 def update_profile(request):
+    existing_order = get_user_pending_order(request)
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
@@ -46,6 +50,7 @@ def update_profile(request):
         'u_form': u_form,
         'p_form': p_form,
         'nbar': 'profile',
+        'order': existing_order,
     }
     return render(request, 'users/update.html', context)
 
