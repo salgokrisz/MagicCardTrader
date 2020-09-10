@@ -21,7 +21,7 @@
                     {% for card in user.card_set.all %}
                     <li class="basic-text">
                         <a href="{% url 'Magic:card_detail' card.id %}" >{{ card.name }}</a>
-                        - Price: {{card.price}}
+                        - Price: ${{card.price}}
                         {% if card.is_foil %}
                         | <span class="glyphicon glyphicon-star"> Foil</span>
                         {% endif %}

@@ -46,9 +46,7 @@ class Card(models.Model):
     #imageUrl = models.TextField(default=get_image_url(name, set_name))
 
     def get_absolute_url(self):
-        return reverse('Magic:user_detail', kwargs={
-            'user_id': self.user.id,
-        })
+        return reverse('Magic:profile')
 
     @classmethod
     def user_cards(self):

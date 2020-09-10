@@ -93,7 +93,7 @@ def user_detail(request, user_id):
     # üzenetküldés
 
 def cards(request):
-    all_cards = Card.objects.filter(is_ordered=False)
+    all_cards = Card.objects.filter(is_ordered=False).exclude(user=request.user)
     page = request.GET.get('page', 1)
     template = loader.get_template('magic/cards.html')
     paginator = Paginator(all_cards, 7)
@@ -132,6 +132,7 @@ def about(request):
 class CardCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Card
     form_class = CardForm
+    success_url = reverse_lazy('Magic:profile')
     context = {
         'nbar': 'add_cards',
     }
@@ -157,7 +158,7 @@ class CardUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class CardDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Card
-    success_url = reverse_lazy('Magic:cards')
+    success_url = reverse_lazy('Magic:profile')
 
     def test_func(self):
         post = self.get_object()

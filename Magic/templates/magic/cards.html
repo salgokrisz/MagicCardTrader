@@ -11,7 +11,7 @@
                 <th>Price</th>
             </tr>
             {% for card in cards %}
-            {% if card.is_ordered == False %}
+            
                 <tr>
                     <td class="img-td">
                         <span class="glyphicon glyphicon-camera"></span>
@@ -27,7 +27,7 @@
                         <a class="user-td-link" href="{% url 'Magic:user_detail' card.user.id %}">{{card.user}}</a>
                     </td>
                     <td class="price-td">
-                        {{card.price}}
+                        ${{card.price}}
                         <a href="{% url 'Magic:add_to_cart' card.id %}" >
                             <button type="submit" class="btn btn-default btn-sm btn-cart">
                                 <span class="glyphicon glyphicon-shopping-cart"></span>
@@ -35,7 +35,7 @@
                         </a>
                     </td>
                 </tr>
-            {% endif %}
+            
             {% endfor %}
         </table>
         <div class="center">
@@ -43,8 +43,6 @@
                 <ul class="pagination">
                     {% if cards.has_previous %}
                         <li><a href="?page={{ cards.previous_page_number }}">&laquo;</a></li>
-                    {% else %}
-                        <li class="disabled"><span>&laquo;</span></li>
                     {% endif %}
                     {% for i in cards.paginator.page_range %}
                         {% if cards.number == i %}
@@ -56,7 +54,7 @@
                     {% if cards.has_next %}
                         <li><a href="?page={{ cards.next_page_number }}">&raquo;</a></li>
                     {% else %}
-                        <li class="disabled"><span>&raquo;</span></li>
+                        <!-- <li class="disabled"><span>&raquo;</span></li> -->
                     {% endif %}
                 </ul>
             {% endif %}
