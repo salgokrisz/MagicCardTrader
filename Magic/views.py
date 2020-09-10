@@ -45,19 +45,16 @@ def index(request):
     # lesznek random lapok kirakva - recommended cards from users
     users = User.objects.all()
     cards = Card.objects.all()
-    existing_order = get_user_pending_order(request)
     template = loader.get_template('magic/index.html')
     context = {
         'users': users,
         'cards': cards,
         'nbar': 'home',
-        'order': existing_order,
     }
     return HttpResponse(template.render(context, request))
 
 def users(request):
     all_users = User.objects.all()
-    existing_order = get_user_pending_order(request)
     page = request.GET.get('page', 1)
     template = loader.get_template('magic/users.html')
     paginator = Paginator(all_users, 7)
@@ -71,14 +68,11 @@ def users(request):
        'all_users': all_users,
        'users': users,
        'nbar': 'users',
-       'order': existing_order,
-
-    }
+        }
     return HttpResponse(template.render(context, request))
 
 def user_detail(request, user_id):
     total_cards = User.objects.all()
-    existing_order = get_user_pending_order(request)
     template = loader.get_template('magic/user_detail.html')
     try:
         user = User.objects.get(pk=user_id)
@@ -89,7 +83,6 @@ def user_detail(request, user_id):
         'user': user,
         'card': card,
         'nbar': 'users',
-        'order': existing_order,
 
     }
     return HttpResponse(template.render(context, request))
@@ -100,8 +93,7 @@ def user_detail(request, user_id):
     # üzenetküldés
 
 def cards(request):
-    all_cards = Card.objects.all()
-    existing_order = get_user_pending_order(request)
+    all_cards = Card.objects.filter(is_ordered=False)
     page = request.GET.get('page', 1)
     template = loader.get_template('magic/cards.html')
     paginator = Paginator(all_cards, 7)
@@ -114,7 +106,6 @@ def cards(request):
     
     context = {
         'all_cards': all_cards,
-        'order': existing_order,
         'cards': cards,
         'nbar':'cards',
     }
@@ -122,7 +113,6 @@ def cards(request):
     return HttpResponse(template.render(context, request))
 
 def card_detail(request, card_id):
-    existing_order = get_user_pending_order(request)
     template = loader.get_template('magic/card_detail.html')
     try:
         card = Card.objects.get(pk=card_id)
@@ -133,7 +123,6 @@ def card_detail(request, card_id):
         'card': card,
         'user': user,
         'nbar':'cards',
-        'order': existing_order,
     }
     return HttpResponse(template.render(context, request))
 

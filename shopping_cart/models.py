@@ -10,7 +10,7 @@ class OrderItem(models.Model):
     date_ordered = models.DateTimeField(null=True)
 
     def __str__(self):
-        return self.card.name
+        return "{}".format(self.card)
 
 class Order(models.Model):
     ref_code = models.CharField(max_length=15)
@@ -26,7 +26,7 @@ class Order(models.Model):
         return round(sum([item.card.price for item in self.items.all()]), 2)
 
     def __str__(self):
-        return '{0}' - '{0}'.format(self.owner, self.ref_code)
+        return "{} - {}".format(self.owner, self.ref_code)
 
 
 class Transaction(models.Model):

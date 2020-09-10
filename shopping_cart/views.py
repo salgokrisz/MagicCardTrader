@@ -9,16 +9,15 @@ from shopping_cart.models import OrderItem, Order, Transaction
 from shopping_cart.extras import generate_order_id#, transaction, generate_client_token
 import datetime
 import stripe
-import users
 
 #stripe.api_key = settings.STRIPE_SECRET_KEY
 
 @login_required()
-def add_to_cart(request, **kwargs):
+def add_to_cart(request, item_id):
     # get the user profile
     user_profile = get_object_or_404(Profile, user=request.user)
     # filter cards by id
-    card = Card.objects.filter(id=kwargs.get('item_id', "")).first()
+    card = Card.objects.filter(id=item_id).first()
     # check if the user already owns this card
     ##if card in request.user.profile.objects.all():
     ##    messages.info(request, 'You already own this card')
@@ -201,7 +200,7 @@ def update_transaction_records(request, order_id):
     user_profile.user.card_set.add(*order_cards)
     user_profile.save()
     messages.info(request, "Thank you! Your purchase was successful!")
-    return redirect(reverse('users:profile'))
+    return redirect(reverse('Magic:profile'))
 
 def success(request, **kwargs):
     # a view signifying the transcation was successful

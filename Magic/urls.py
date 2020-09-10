@@ -34,11 +34,13 @@ urlpatterns = [
 
     #re_path(r'^register/$', views.UserFormView.as_view(), name='register'),
     #/register, update_profile
+    re_path(r'^profile/$', UsersView.profile, name="profile"),
     re_path(r'^register/$', UsersView.register, name="register"),
     re_path(r'^update_profile/$', UsersView.update_profile, name="update_profile"),
 
     #/cart urls
     re_path(r'add-to-cart/(?P<item_id>[-\w]+)/$', CartView.add_to_cart, name="add_to_cart"),
+    #re_path(r'add-to-cart/<slug>/', CartView.add_to_cart, name="add_to_cart"),
     re_path(r'^order-summary/$', CartView.order_details, name="order_summary"),
     re_path(r'^success/$', CartView.success, name="purchase_success"),
     re_path(r'^item/delete/(?P<item_id>[-\w]+)/$', CartView.delete_from_cart, name="delete_from_cart"),

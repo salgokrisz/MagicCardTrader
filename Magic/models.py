@@ -45,9 +45,10 @@ class Card(models.Model):
     is_ordered = models.BooleanField(default=False)
     #imageUrl = models.TextField(default=get_image_url(name, set_name))
 
-
     def get_absolute_url(self):
-        return reverse('Magic:user_detail', kwargs={'user_id': self.user.id})
+        return reverse('Magic:user_detail', kwargs={
+            'user_id': self.user.id,
+        })
 
     @classmethod
     def user_cards(self):
@@ -68,7 +69,3 @@ class CardPhoto(models.Model):
 # it is not yet migrated
 # maybe we change the structure to user -> card, so there will be users and they will have cards that they can sell.
 # first we should finish or at least countinue the tutorial ...
-    
-
-
-    
