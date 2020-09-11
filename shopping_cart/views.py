@@ -1,12 +1,16 @@
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
-from Magic.models import Profile, Card
+from django.views.generic import DetailView, View
+from Magic.models import Profile, Card, Address
 from shopping_cart.models import OrderItem, Order, Transaction
 from shopping_cart.extras import generate_order_id#, transaction, generate_client_token
+from .forms import CheckoutForm
 import datetime
 import stripe
 
@@ -205,3 +209,56 @@ def update_transaction_records(request, order_id):
 def success(request, **kwargs):
     # a view signifying the transcation was successful
     return render(request, 'shopping_cart/purchase_success.html', {})
+
+
+#-------------
+
+class OrderSummaryView(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        try:
+            order = Order.objects.get(owner=self.request.user.profile)
+            
+            context = {
+                'order': order,
+            }
+            return render(self.request, 'shopping_cart/order_summary.html', context)
+        except ObjectDoesNotExist:
+            messages.error(self.request, "You do not have an active order!")
+            return redirect('Magic:cards')
+
+class CheckoutView(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        #form
+        form = CheckoutForm()
+        context = {
+            'form': form
+        }
+        return render(self.request, 'shopping_cart/checkout.html', context)
+
+    def post(self, *args, **kwargs):
+        form = CheckoutForm(self.request.POST or None)
+        try:
+            order = Order.objects.get(owner=self.request.user.profile)
+            if form.is_valid():
+                street_address = form.cleaned_data.get('street_address')
+                apartment_number = form.cleaned_data.get('apartment_number')
+                country = form.cleaned_data.get('country')
+                zip_code = form.cleaned_data.get('zip_code')
+                payment_option = form.cleaned_data.get('payment_option')
+                shipping_address = Address(
+                    user = self.request.user,
+                    street_address = street_address,
+                    apartment_number = apartment_number,
+                    country = country,
+                    zip_code = zip_code,
+                )
+                shipping_address.save()
+                order.shipping_address = shipping_address
+                order.save()
+                return redirect('Magic:profile')
+            messages.warning(self.request, "Failed to checkout!")
+            return redirect('Magic:checkout')
+        except ObjectDoesNotExist:
+            messages.error(self.request, "You do not have an active order!")
+            return redirect('Magic:order-summary')
+        

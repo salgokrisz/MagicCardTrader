@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'Magic.apps.MagicConfig',
     'users.apps.UsersConfig',
+    'django_countries',
     'shopping_cart.apps.ShoppingCartConfig',
     'crispy_forms',
     'django.contrib.admin',

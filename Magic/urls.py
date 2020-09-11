@@ -40,11 +40,13 @@ urlpatterns = [
 
     #/cart urls
     re_path(r'add-to-cart/(?P<item_id>[-\w]+)/$', CartView.add_to_cart, name="add_to_cart"),
-    #re_path(r'add-to-cart/<slug>/', CartView.add_to_cart, name="add_to_cart"),
-    re_path(r'^order-summary/$', CartView.order_details, name="order_summary"),
-    re_path(r'^success/$', CartView.success, name="purchase_success"),
     re_path(r'^item/delete/(?P<item_id>[-\w]+)/$', CartView.delete_from_cart, name="delete_from_cart"),
-    re_path(r'^checkout/$', CartView.checkout, name="checkout"),
+    re_path(r'order-summary/', CartView.OrderSummaryView.as_view(), name="order_summary"),
+    re_path(r'^checkout/$', CartView.CheckoutView.as_view(), name="checkout"),
+    #re_path(r'add-to-cart/<slug>/', CartView.add_to_cart, name="add_to_cart"),
+    #re_path(r'^order-summary/$', CartView.order_details, name="order_summary"),
+    #re_path(r'^checkout/$', CartView.checkout, name="checkout"),
+    re_path(r'^success/$', CartView.success, name="purchase_success"),
     re_path(r'^payment/(?P<order_id>[-\w]+)/$', CartView.process_payment, name="process_payment"),
     re_path(r'^update-transaction/(?P<order_id>[-\w]+)/$', CartView.update_transaction_records, name="update_records"),
     

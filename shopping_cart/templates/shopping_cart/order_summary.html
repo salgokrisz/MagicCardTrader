@@ -1,6 +1,55 @@
 {% extends 'magic/base.html' %}
-
 {% block body %}
+  <div class="container">
+    <div class="table-responsive text-nowrap">
+      <h2 class="basic-text">Order Summary</h2>
+      <table class="table" id="card-table">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Card Name</th>
+            <th scope="col">Price</th>
+            <!-- <th scope="col">Quantity</th>
+            <th scope="col">Total Card Price</th> -->
+          </tr>
+          {% for order_item in order.items.all %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ order_item.card.name }}</td>
+            <td><a href="{% url 'Magic:delete_from_cart' order_item.id %}"><span class="glyphicon glyphicon-trash"></span></a> ${{ order_item.card.price }}</td>
+          </tr>
+          {% endfor %}
+          <tr>
+            <td colspan="2"><strong>Order Total:</strong></td>
+            <td><strong>${{ order.get_cart_total }}</strong></td>
+          </tr>
+          {% if order.get_cart_total > 0 %}
+            <tr>
+              <td colspan="3">
+                <a class="btn btn-danger" href="{% url 'Magic:cards' %}">Back to shopping</a>
+                <a class="btn btn-success btn-checkout" href="{% url 'Magic:checkout' %}">Proceed to checkout</a>
+              </td>
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="3"><b>Your cart is empty</b></td>
+            </tr>
+            <tr>
+              <td colspan="3">
+                <a class="btn btn-danger" href="{% url 'Magic:cards' %}">Back to shopping</a>
+              </td>
+            </tr>
+          {% endif %}
+          
+
+      </table>
+    
+    </div>
+
+  </div>
+{% endblock %}
+<!-- ide egy extends base.html kerül
+
+ide egy blockbody kerül
 
     <table id="card-table">
       <tr class="text-center">
@@ -51,7 +100,7 @@
       </tr>
     </table>
      
-{% endblock %}
+ide egy endblock kerül
 
 {% block scripts %}
   {{ block.super }}
@@ -60,4 +109,6 @@
     return confirm("Do you want to remove this item from cart?");
   }
   </script>
-{% endblock scripts %}
+{% endblock scripts %} -->
+
+
