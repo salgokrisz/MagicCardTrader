@@ -8,13 +8,16 @@ from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView, View
 from Magic.models import Profile, Card, Address
-from shopping_cart.models import OrderItem, Order, Transaction
+from shopping_cart.models import OrderItem, Order, Payment
 from shopping_cart.extras import generate_order_id#, transaction, generate_client_token
 from .forms import CheckoutForm
 import datetime
+from django.utils import timezone
 import stripe
 
-#stripe.api_key = settings.STRIPE_SECRET_KEY
+stripe.api_key = "sk_test_4eC39HqLyjWDarjtT1zdp7dc"
+
+# `source` is obtained with Stripe.js; see https://stripe.com/docs/payments/accept-a-payment-charges#web-create-token
 
 @login_required()
 def add_to_cart(request, item_id):
@@ -58,7 +61,7 @@ def delete_from_cart(request, item_id):
 
 def get_user_pending_order(request):
     # get order for the correct user
-    user_profile = get_object_or_404(Profile, user=request.user)
+    user_profile = get_object_or_404(Profile, user=request.user.username)
     order = Order.objects.filter(owner=user_profile, is_ordered=False)
     if order.exists():
         # get the only order in the list of filtered orders
@@ -193,7 +196,7 @@ def update_transaction_records(request, order_id):
     order_items.update(is_ordered=True, date_ordered=datetime.datetime.now())
 
     # Add cards to user profile
-    user_profile = get_object_or_404(Profile, user=request.user)
+    user_profile = get_object_or_404(User, user=request.user)
     # get the cards from the items
     """ for item in order_items:
         card_id = item.card.id
@@ -216,7 +219,7 @@ def success(request, **kwargs):
 class OrderSummaryView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
-            order = Order.objects.get(owner=self.request.user.profile)
+            order = Order.objects.filter(owner=self.request.user.profile).last()
             
             context = {
                 'order': order,
@@ -238,7 +241,7 @@ class CheckoutView(LoginRequiredMixin, View):
     def post(self, *args, **kwargs):
         form = CheckoutForm(self.request.POST or None)
         try:
-            order = Order.objects.get(owner=self.request.user.profile)
+            order = Order.objects.filter(owner=self.request.user.profile).last()
             if form.is_valid():
                 street_address = form.cleaned_data.get('street_address')
                 apartment_number = form.cleaned_data.get('apartment_number')
@@ -253,12 +256,98 @@ class CheckoutView(LoginRequiredMixin, View):
                     zip_code = zip_code,
                 )
                 shipping_address.save()
-                order.shipping_address = shipping_address
+                order.address = shipping_address
                 order.save()
-                return redirect('Magic:profile')
+
+                #return redirect('Magic:payment', payment_option='stripe')
+                return redirect('Magic:payment')
             messages.warning(self.request, "Failed to checkout!")
             return redirect('Magic:checkout')
         except ObjectDoesNotExist:
             messages.error(self.request, "You do not have an active order!")
             return redirect('Magic:order-summary')
         
+
+class PaymentView(View):
+    def get(self, *args, **kwargs):
+        # order
+        return render(self.request, 'shopping_cart/payment.html')
+    
+    def post(self, *args, **kwargs):
+        order = Order.objects.get(owner=self.request.user.profile, is_ordered=False)
+        #token = self.request.POST.get('stripeToken')
+        token = stripe.Token.create(
+            card={
+                "number": "4242424242424242",
+                "exp_month": 9,
+                "exp_year": 2021,
+                "cvc": "314",
+            },
+        )
+        amount=int(order.get_cart_total()*100)
+        
+
+        try:
+            charge = stripe.Charge.create(
+                amount=amount,
+                currency="usd",
+                source=token,
+            )
+
+
+            order_items = order.items.all()
+            # update order items
+            order_items.update(is_ordered=True, date_ordered=timezone.now())
+            # Add cards to user profile
+            user = get_object_or_404(Profile, user=self.request.user.profile.user)
+            # get the cards from the items
+            #order_cards = [item.card for item in order_items]
+            for item in order_items:
+                user.user.card_set.add(item.card)
+                #item.card.update(user=user)
+                #item.card.save()
+                user.save()
+            #user.card_set.add(order_cards)
+            #user.save()
+                    
+            #create payment
+            payment = Payment()
+            payment.stripe_charge_id = charge.id
+            payment.user = self.request.user
+            payment.amount = amount / 100
+            payment.save()
+
+            #assing the payment to the order
+            order.is_ordered = True
+            order.payment = payment
+            order.save()
+
+            messages.success(self.request, "Your order was succesful")
+            return redirect("Magic:profile")
+
+        except stripe.error.CardError as e:
+            body = e.json_body
+            err = body.get('error', )
+            messages.info(self.request, "{err.get('message')}")
+        except stripe.error.RateLimitError as e:
+            messages.info(self.request, "Rate limit error")
+            return redirect("Magic:profile")
+
+        except stripe.error.InvalidRequestError as e:
+            messages.info(self.request, e)
+            return redirect("Magic:profile")
+            
+        except stripe.error.AuthenticationError as e:
+            messages.info(self.request, "Not authenticated")
+            return redirect("Magic:profile")
+            
+        except stripe.error.APIConnectionError as e:
+            messages.info(self.request, "Network error")
+            return redirect("Magic:profile")
+            
+        except stripe.error.StripeError as e:
+            messages.info(self.request, "Something went wrong. You are not charged. Please try again.")
+            return redirect("Magic:profile")
+            
+      
+

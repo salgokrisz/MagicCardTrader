@@ -7,6 +7,6 @@ register = template.Library()
 def cart_item_counter(user):
     if user.is_authenticated:
         qs = Order.objects.filter(is_ordered=False, owner=user.profile)
-        if qs.exists:
+        if qs.exists():
             return qs[0].items.count()
     return 0

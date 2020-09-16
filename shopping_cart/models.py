@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from Magic.models import Card, Profile
+from Magic.models import Card, Profile, Address
 
 
 class OrderItem(models.Model):
@@ -18,6 +18,8 @@ class Order(models.Model):
     is_ordered = models.BooleanField(default=False)
     items = models.ManyToManyField(OrderItem)
     date_ordered = models.DateTimeField(auto_now=True)
+    address = models.ForeignKey(Address, on_delete=models.SET_NULL, blank=True, null=True)
+    payment = models.ForeignKey('Payment', on_delete=models.SET_NULL, blank=True, null=True)
 
     def get_cart_items(self):
         return self.items.all()
@@ -29,16 +31,15 @@ class Order(models.Model):
         return "{} - {}".format(self.owner, self.ref_code)
 
 
-class Transaction(models.Model):
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    token = models.CharField(max_length=120)
-    order_id = models.CharField(max_length=120)
+class Payment(models.Model):
+    stripe_charge_id = models.CharField(max_length=50)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
     amount = models.DecimalField(max_digits=100, decimal_places=2)
-    success = models.BooleanField(default=True)
-    timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    
 
     def __str__(self):
-        return self.order_id
+        return self.stripe_charge_id
 
     class Meta:
         ordering = ['-timestamp']

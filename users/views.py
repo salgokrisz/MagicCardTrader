@@ -25,10 +25,10 @@ def register(request):
 
 @login_required
 def profile(request):
-    existing_order = get_user_pending_order(request)
+    #existing_order = get_user_pending_order(request)
     context = {
         'nbar': 'profile',
-        'order': existing_order,
+        #'order': existing_order,
     }
     return render(request, 'users/profile.html', context)
 

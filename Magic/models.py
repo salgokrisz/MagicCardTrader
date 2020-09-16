@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Count
 from django.urls import reverse
-from mtgsdk import Card
+from mtgsdk import Card as MtgCard
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save

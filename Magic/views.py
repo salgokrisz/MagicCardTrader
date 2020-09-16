@@ -93,7 +93,10 @@ def user_detail(request, user_id):
     # üzenetküldés
 
 def cards(request):
-    all_cards = Card.objects.filter(is_ordered=False).exclude(user=request.user)
+    if request.user.is_authenticated:
+        all_cards = Card.objects.filter(is_ordered=False).exclude(user=request.user)
+    else:
+        all_cards = Card.objects.filter(is_ordered=False)
     page = request.GET.get('page', 1)
     template = loader.get_template('magic/cards.html')
     paginator = Paginator(all_cards, 7)
