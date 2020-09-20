@@ -1,4 +1,5 @@
 from .models import Card
+from .filters import CardFilter, UserFilter
 from Magic.forms import CardForm
 from django.http import Http404
 from django.http import HttpResponse
@@ -13,22 +14,9 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models.functions import Lower
 from shopping_cart.views import get_user_pending_order
 
-#generic views but neet to figure out how these work
-#class indexView(generic.ListView):
-#    tamplate_name = 'magic/index.html'
-#
-#class UsersView(generic.ListView):
-#    tamplate_name = 'magic/users.html'
-#    context_object_name = 'all_users'
-#
-#    def get_queryset(self):
-#        return User.objects.all()
-#
-#class UserDetailView(generic.ListView):
-#    model = User
-#    template_name = 'magic/user_detail.html'
 
 # Create your views here.
 
@@ -38,7 +26,7 @@ from shopping_cart.views import get_user_pending_order
    
 def index(request):
     # TODO
-    # be lehet jelentkezni 
+    # be lehet jelentkezni - DONE
     # itt lehet keresni usereket
     # lehet keresni lapokat
     # lesznek random userek kirakva - recommended users
@@ -54,9 +42,13 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 def users(request):
-    all_users = User.objects.all()
-    page = request.GET.get('page', 1)
     template = loader.get_template('magic/users.html')
+    all_users = User.objects.all()
+
+    user_filter = UserFilter(request.GET, queryset=all_users)
+    all_users = user_filter.qs
+
+    page = request.GET.get('page', 1)
     paginator = Paginator(all_users, 7)
     try:
         users = paginator.page(page)
@@ -68,6 +60,7 @@ def users(request):
        'all_users': all_users,
        'users': users,
        'nbar': 'users',
+       'user_filter': user_filter
         }
     return HttpResponse(template.render(context, request))
 
@@ -93,13 +86,29 @@ def user_detail(request, user_id):
     # üzenetküldés
 
 def cards(request):
+    #template_name to render the view
+    template = loader.get_template('magic/cards.html')
+    #if the user is authenticated he/she cannot see his/her cards in the cards_for_sale view
     if request.user.is_authenticated:
         all_cards = Card.objects.filter(is_ordered=False).exclude(user=request.user)
     else:
         all_cards = Card.objects.filter(is_ordered=False)
-    page = request.GET.get('page', 1)
-    template = loader.get_template('magic/cards.html')
+    #ordering
+    order_by = request.GET.get('order_by')
+    direction = request.GET.get('direction')
+    if direction == 'desc':
+         all_cards = all_cards.order_by(order_by).reverse()
+    elif direction == 'asc':
+        all_cards = all_cards.order_by(order_by)
+
+    #filtering
+    card_filter = CardFilter(request.GET, queryset=all_cards)
+    if card_filter:
+        all_cards = card_filter.qs
+
+    #pagination
     paginator = Paginator(all_cards, 7)
+    page = request.GET.get('page', 1)
     try:
         cards = paginator.page(page)
     except PageNotAnInteger:
@@ -107,10 +116,14 @@ def cards(request):
     except EmptyPage:
         cards = paginator.page(paginator.num_pages)
     
+    #context to allow the template get access to the variables
     context = {
         'all_cards': all_cards,
         'cards': cards,
         'nbar':'cards',
+        'order_by': order_by,
+        'direction': direction,
+        'card_filter': card_filter,
     }
 
     return HttpResponse(template.render(context, request))
