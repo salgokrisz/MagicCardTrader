@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django_countries.fields import CountryField
 from django import forms
-from Magic.models import Profile
+from Magic.models import Profile, Address
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField() 
@@ -20,4 +21,9 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['user_photo', 'address']
+        fields = ['user_photo']
+
+class AddressUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields = ['street_address', 'apartment_number', 'country', 'zip_code']

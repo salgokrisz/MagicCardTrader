@@ -12,7 +12,8 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
     user_photo = models.FileField(upload_to='profile_images', default='profile_images/default-profile-picture.jpg')
     date_registered = models.DateTimeField(auto_now_add=True, blank=True)
-    address = models.TextField()
+    #address = models.TextField(null=True, blank=True)
+    address = models.ForeignKey('Address', on_delete=models.SET_NULL, blank=True, null=True)
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):

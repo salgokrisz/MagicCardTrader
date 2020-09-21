@@ -61,7 +61,7 @@ def delete_from_cart(request, item_id):
 
 def get_user_pending_order(request):
     # get order for the correct user
-    user_profile = get_object_or_404(Profile, user=request.user.username)
+    user_profile = get_object_or_404(Profile, user=request.user.id)
     order = Order.objects.filter(owner=user_profile, is_ordered=False)
     if order.exists():
         # get the only order in the list of filtered orders

@@ -1,4 +1,4 @@
-from .models import Card
+from .models import Card, Profile
 from .filters import CardFilter, UserFilter
 from Magic.forms import CardForm
 from django.http import Http404
@@ -33,6 +33,11 @@ def index(request):
     # lesznek random lapok kirakva - recommended cards from users
     users = User.objects.all()
     cards = Card.objects.all()
+    profiles = Profile.objects.all()
+    for profile in profiles:
+        if profile.address:
+            profile.address = None
+            profile.save()
     template = loader.get_template('magic/index.html')
     context = {
         'users': users,
@@ -44,10 +49,18 @@ def index(request):
 def users(request):
     template = loader.get_template('magic/users.html')
     all_users = User.objects.all()
-
+    order_by = request.GET.get('order_by')
+    #order_by = Lower(order_by)
+    #ordering
+    direction = request.GET.get('direction')
+    if direction == 'desc':
+         all_users = all_users.order_by(Lower(order_by)).reverse()
+    elif direction == 'asc':
+        all_users = all_users.order_by(Lower(order_by))
+    #filter(search) 
     user_filter = UserFilter(request.GET, queryset=all_users)
     all_users = user_filter.qs
-
+    #paginator
     page = request.GET.get('page', 1)
     paginator = Paginator(all_users, 7)
     try:
@@ -60,7 +73,9 @@ def users(request):
        'all_users': all_users,
        'users': users,
        'nbar': 'users',
-       'user_filter': user_filter
+       'user_filter': user_filter,
+       'order_by': order_by,
+       'direction': direction,
         }
     return HttpResponse(template.render(context, request))
 
@@ -97,14 +112,20 @@ def cards(request):
     order_by = request.GET.get('order_by')
     direction = request.GET.get('direction')
     if direction == 'desc':
-         all_cards = all_cards.order_by(order_by).reverse()
+        if order_by == 'price':
+            all_cards = all_cards.order_by(order_by).reverse()
+        else:
+            all_cards = all_cards.order_by(Lower(order_by)).reverse()
+         
     elif direction == 'asc':
-        all_cards = all_cards.order_by(order_by)
+        if order_by == 'price':
+            all_cards = all_cards.order_by(order_by)
+        else: 
+            all_cards = all_cards.order_by(Lower(order_by))
 
     #filtering
     card_filter = CardFilter(request.GET, queryset=all_cards)
-    if card_filter:
-        all_cards = card_filter.qs
+    all_cards = card_filter.qs
 
     #pagination
     paginator = Paginator(all_cards, 7)
@@ -181,36 +202,5 @@ class CardDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.request.user == post.user:
             return True
         return False
-
-'''
-class UserFormView(View):
-    form_class = UserForm
-    template_name = 'magic/registration_form.html'
-
-
-    #display a blank form
-    def get(self, request):
-        form = self.form_class(None)
-        return render(request, self.template_name, {'form': form})
-
-
-    # process form data, add user to database
-    def post(self, request):
-        form = self.form_class(request.POST)
-
-        if form.is_valid():
-            user = form.save(commit=False)
-            # returns user objects if credentials are correct
-            user = authenticate(username=username, password=password)
-
-            if user is not None:
-                if user.is_active:
-                    login(request, user)
-                    return redirect('Magic:index')
-        
-        return render(request, self.template_name, {'form': form})
-'''
-
-
 
 
