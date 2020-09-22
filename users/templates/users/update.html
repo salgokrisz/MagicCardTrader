@@ -24,7 +24,7 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="container-fluid">
-            <form class="form-horizontal" action="" method="POST" enctype="multipart/form-data">
+            <form class="form-horizontal" action="{% url 'Magic:update_profile' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <fieldset>
                     <legend class="border-bottom mb-4">
@@ -32,6 +32,7 @@
                     </legend>
                     {{ u_form|crispy }}
                     {{ p_form|crispy }}
+                    {{ a_form|crispy }}
                 </fieldset>
                 <div class="form-group">
                     <button class="btn btn-success" type="submit">

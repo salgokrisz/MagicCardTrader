@@ -23,7 +23,3 @@ class ProfileUpdateForm(forms.ModelForm):
         model = Profile
         fields = ['user_photo']
 
-class AddressUpdateForm(forms.ModelForm):
-    class Meta:
-        model = Address
-        fields = ['street_address', 'apartment_number', 'country', 'zip_code']

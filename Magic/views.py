@@ -1,6 +1,6 @@
-from .models import Card, Profile
+from .models import Card, Profile, Address
 from .filters import CardFilter, UserFilter
-from Magic.forms import CardForm
+from Magic.forms import CardForm, AddressUpdateForm
 from django.http import Http404
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -27,17 +27,13 @@ from shopping_cart.views import get_user_pending_order
 def index(request):
     # TODO
     # be lehet jelentkezni - DONE
-    # itt lehet keresni usereket
-    # lehet keresni lapokat
+    # itt lehet keresni usereket - DONE
+    # lehet keresni lapokat - DONE
     # lesznek random userek kirakva - recommended users
     # lesznek random lapok kirakva - recommended cards from users
     users = User.objects.all()
     cards = Card.objects.all()
     profiles = Profile.objects.all()
-    for profile in profiles:
-        if profile.address:
-            profile.address = None
-            profile.save()
     template = loader.get_template('magic/index.html')
     context = {
         'users': users,
@@ -165,6 +161,29 @@ def card_detail(request, card_id):
 
 def about(request):
     return HttpResponse('<h3>Magic Card Trader About</h3>')
+
+class AddressCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Address
+    form_class = AddressUpdateForm
+    success_url = reverse_lazy('Magic:profile')
+    context = {
+        'nbar': 'profile'
+    }
+    def test_func(self):
+        if self.request.user:
+            return True
+        else:
+            return False
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        model_instance = form.save(commit=False)
+        self.request.user.profile.address = model_instance
+        self.request.user.profile.address.save()
+        self.request.user.profile.save()
+        self.request.user.save()
+        model_instance.save()
+        form.save()
+        return super().form_valid(form)
 
 class CardCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Card

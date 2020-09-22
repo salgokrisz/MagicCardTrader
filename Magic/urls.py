@@ -38,6 +38,8 @@ urlpatterns = [
     re_path(r'^register/$', UsersView.register, name="register"),
     re_path(r'^update_profile/$', UsersView.update_profile, name="update_profile"),
 
+    re_path(r'^update_address/$', views.AddressCreate.as_view(), name="create_address"),
+
     #/cart urls
     re_path(r'add-to-cart/(?P<item_id>[-\w]+)/$', CartView.add_to_cart, name="add_to_cart"),
     re_path(r'^item/delete/(?P<item_id>[-\w]+)/$', CartView.delete_from_cart, name="delete_from_cart"),

@@ -11,8 +11,16 @@
                 <img class="img-rounded img-responsive" src="{{ user.profile.user_photo.url }}" width=200px>
                 <h2 class="account-heading basic-text">Name: {{ user.get_username }} </h2>
                 <p class="text-secondary basic-text">Email: {{ user.email }} </p>
-                {% if user.profile.address %}
-                    <p class="text-secondary basic-text">Address: {{ user.profile.address }}</p>
+                {% if user.profile.address != None %}
+                    <p class="text-secondary basic-text">
+                        Address: <div class="text-secondary basic-text" style="padding-left:5em">
+                            Street: {{ user.profile.address.street_address }} <br>
+                            Apartment No.: {{ user.profile.address.apartment_number }} <br>
+                            Country: {{ user.profile.address.country }} <br>
+                            Zip Code: {{ user.profile.address.zip_code }} <br>
+
+
+                        </div> </p>
                 {% else %}
                     <p class="text-secondary basic-text">Address: No address set</p>
                 {% endif %}

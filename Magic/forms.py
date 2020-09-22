@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from Magic.models import Card, Profile
+from Magic.models import Card, Profile, Address
 from django import forms
 
 '''
@@ -14,3 +14,8 @@ class CardForm(forms.ModelForm):
     class Meta:
         model = Card
         exclude = ['user']
+
+class AddressUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields = ['street_address', 'apartment_number', 'country', 'zip_code']

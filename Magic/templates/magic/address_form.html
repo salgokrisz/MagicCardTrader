@@ -1,0 +1,32 @@
+<!--add new card here-->
+{% extends 'magic/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Address {% endblock %}
+{% block cards_active %} active {% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-md-17">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-horizontal" action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% include 'magic/from-template.html' %}
+                        {% load crispy_forms_tags %}
+                        <!--<label class="control-label col-sm-2" for="user">User: </label>
+                        <div class="col-sm-10">{{ request.user }}</div>-->
+                        <div class="from-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-success pt-4 margin-top-4">Submiit</button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
