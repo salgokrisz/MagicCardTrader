@@ -36,16 +36,16 @@ class Address(models.Model):
 
     def __str__(self):
         return self.user.username
-'''
+
 def get_image_url(name, set_name):
         listOfVersions = []
-        versions = Card.where(name=name, set=set_name).all()
+        versions = MtgCard.where(name=name, set=set_name).all()
         for card in versions:
             listOfVersions.append(card.image_url)
         listOfVersions = list(dict.fromkeys(listOfVersions))
         print(listOfVersions)
         return listOfVersions
-'''
+
 class Card(models.Model):
     name = models.CharField(max_length = 150)
     set_name = models.CharField(max_length = 150)

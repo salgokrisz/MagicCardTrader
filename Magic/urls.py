@@ -35,6 +35,8 @@ urlpatterns = [
     #re_path(r'^register/$', views.UserFormView.as_view(), name='register'),
     #/register, update_profile
     re_path(r'^profile/$', UsersView.profile, name="profile"),
+    re_path(r'^profile_cards/$', UsersView.profile_cards, name="profile_cards"),
+    re_path(r'^profile_purchases/$', UsersView.profile_purchases, name="profile_purchases"),
     re_path(r'^register/$', UsersView.register, name="register"),
     re_path(r'^update_profile/$', UsersView.update_profile, name="update_profile"),
 

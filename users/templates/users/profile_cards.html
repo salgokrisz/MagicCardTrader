@@ -1,0 +1,51 @@
+{% extends 'magic/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Profile {% endblock %}
+
+{% block body %}
+<div class="card">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+          <a href="{% url 'Magic:profile' %}" class="nav-link {% if nbar == 'profile' %} active {% endif %}">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'Magic:profile_cards' %}" class="nav-link {% if nbar == 'profile_cards' %} active {% endif %}">My Cards</a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'Magic:profile_purchases' %}" class="nav-link {% if nbar == 'profile_purchases' %} active {% endif %}" tabindex="-1">My Purchases</a>
+        </li>
+      </ul>
+    </div>
+    <div class="card-body">
+        <div class="card mb-3" style="max-width: 540px;">
+            <div class="row no-gutters">
+              <div class="col-md-8">
+                <div class="card-body">
+                    <p class="text-secondary basic-text">Available Cards: {{ user.card_set.count }} </p>
+                    <ul>
+                        {% for card in user.card_set.all %}
+                        <li class="basic-text">
+                            <a href="{% url 'Magic:card_detail' card.id %}" >{{ card.name }}</a>
+                            - Price: ${{card.price}}
+                            {% if card.is_foil %}
+                            | <span class="glyphicon glyphicon-star"> Foil</span>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{% url 'Magic:card_add' %}">
+                        <button class="btn btn-warning">
+                            <small>Add card</small>
+                        </button>
+                    </a>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

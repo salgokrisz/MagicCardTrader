@@ -14,7 +14,7 @@ body{
 
 .active{
     color: aqua;
-    background-color: rgb(0, 0, 121);
+    background-color: lightgrey;
 }
 
 .basic-text{

@@ -30,13 +30,28 @@ def profile(request):
     #existing_order = get_user_pending_order(request)
     user = request.user
     address = Address.user
-    print(address)
     context = {
         'nbar': 'profile',
         'address': address,
         #'order': existing_order,
     }
     return render(request, 'users/profile.html', context)
+
+@login_required
+def profile_cards(request):
+    user = request.user
+    context = {
+        'nbar': 'profile_cards',
+    }
+    return render(request, 'users/profile_cards.html', context)
+
+@login_required
+def profile_purchases(request):
+    user = request.user
+    context = {
+        'nbar': 'profile_purchases',
+    }
+    return render(request, 'users/profile_purchases.html', context)
 
 @login_required
 def update_profile(request):

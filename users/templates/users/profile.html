@@ -3,52 +3,87 @@
 {% block title %} Profile {% endblock %}
 
 {% block body %}
-<div class="content-box paanel panel-default">
-    <div class="media-body">
-        <div class="panel-body">
-            <div class="container-fluid">
+<div class="card">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+          <a href="{% url 'Magic:profile' %}" class="nav-link {% if nbar == 'profile' %} active {% endif %}">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'Magic:profile_cards' %}" class="nav-link {% if nbar == 'profile_cards' %} active {% endif %}">My Cards</a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'Magic:profile_purchases' %}" class="nav-link {% if nbar == 'profile_purchases' %} active {% endif %}">My Purchases</a>
+        </li>
+      </ul>
+    </div>
+    {% if nbar == 'profile' %}
+    <div class="card-body">
+        <div class="card mb-3" style="max-width: 540px;">
+            <div class="row no-gutters">
+              <div class="col-md-4">
                 <img class="img-rounded img-responsive" src="{{ user.profile.user_photo.url }}" width=200px>
-                <h2 class="account-heading basic-text">Name: {{ user.get_username }} </h2>
-                <p class="text-secondary basic-text">Email: {{ user.email }} </p>
-                {% if user.profile.address is not None %}
-                    <p class="text-secondary basic-text">
-                        Address: <div class="text-secondary basic-text" style="padding-left:5em">
-                            Street: {{ user.profile.address.street_address }} <br>
-                            Apartment No.: {{ user.profile.address.apartment_number }} <br>
-                            Country: {{ user.profile.address.country }} <br>
-                            Zip Code: {{ user.profile.address.zip_code }} <br>
-
-
-                        </div> </p>
-                {% else %}
-                    <p class="text-secondary basic-text">Address: No address set -<a href="{% url 'Magic:create_address' %}"> Set now!</a></p>
-                {% endif %}
-        
-                <p class="text-secondary basic-text">Available Cards: {{ user.card_set.count }} </p>
-                <ul>
-                    {% for card in user.card_set.all %}
-                    <li class="basic-text">
-                        <a href="{% url 'Magic:card_detail' card.id %}" >{{ card.name }}</a>
-                        - Price: ${{card.price}}
-                        {% if card.is_foil %}
-                        | <span class="glyphicon glyphicon-star"> Foil</span>
-                        {% endif %}
-                    </li>
-                    {% endfor %}
-                </ul>
-                <a href="{% url 'Magic:card_add' %}">
-                    <button class="btn btn-warning">
-                        <small>Add card</small>
-                    </button>
-                </a>
-                <a href="{% url 'Magic:update_profile' %}">
-                    <button class="btn btn-danger" type="submit">
-                        <small>Update Profile</small>
-                    </button>
-                </a>
+              </div>
+              <div class="col-md-8">
+                <div class="card-body ml-4">
+                    <h2 class="account-heading basic-text">Name: {{ user.get_username }} </h2>
+                    <p class="card-text">Email: {{ user.email }} </p>
+                    {% if user.profile.address is not None %}
+                        <p class="card-text">
+                            Address: <div class="text-secondary basic-text">
+                                Street: {{ user.profile.address.street_address }} <br>
+                                Apartment No.: {{ user.profile.address.apartment_number }} <br>
+                                Country: {{ user.profile.address.country }} <br>
+                                Zip Code: {{ user.profile.address.zip_code }} <br>
+    
+    
+                            </div> </p>
+                    {% else %}
+                        <p class="text-secondary basic-text">Address: No address set -<a href="{% url 'Magic:create_address' %}"> Set now!</a></p>
+                    {% endif %}
+                    <a href="{% url 'Magic:update_profile' %}">
+                        <button class="btn btn-info" type="submit">
+                            <small>Update Profile</small>
+                        </button>
+                    </a>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+    {% elif nbar == 'profile_cards' %}
+        <div class="card-body">
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row no-gutters">
+                <div class="col-md-4">
+                    <img class="img-rounded img-responsive" src="{{ user.profile.user_photo.url }}" width=200px>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <p class="text-secondary basic-text">Available Cards: {{ user.card_set.count }} </p>
+                        <ul>
+                            {% for card in user.card_set.all %}
+                            <li class="basic-text">
+                                <a href="{% url 'Magic:card_detail' card.id %}" >{{ card.name }}</a>
+                                - Price: ${{card.price}}
+                                {% if card.is_foil %}
+                                | <span class="glyphicon glyphicon-star"> Foil</span>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <a href="{% url 'Magic:card_add' %}">
+                            <button class="btn btn-warning">
+                                <small>Add card</small>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
+  </div>
 </div>
 
 
