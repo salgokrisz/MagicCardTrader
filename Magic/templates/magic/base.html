@@ -24,11 +24,6 @@
                 
                 <!--Header-->
                 <div class="navbar-header ">
-                    <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button> -->
                     <a class="navbar-brand" href="{% url 'Magic:index' %}">Magic Card Trader</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -63,9 +58,6 @@
                         <form class="navbar-form form-inline navbar-left " role="search" method="GET" action="#">
                             {{ card_filter.form }}
                             {% load crispy_forms_tags %}
-                            <!-- <div class="form-group">
-                                <input type="text" class="form-control" name="q" value="" placeholder="{% if nbar == 'users' %} Search Users... {% else %} Search Cards... {% endif %}">
-                            </div> -->
                             <button type="submit" class="btn btn-sm btn-success my-2 my-sm-0">
                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
@@ -78,9 +70,6 @@
                         <form class="navbar-form form-inline my-2 my-lg-0" role="search" method="GET" action="#">
                             {{ user_filter.form }}
                             {% load crispy_forms_tags %}
-                            <!-- <div class="form-group">
-                                <input type="text" class="form-control" name="q" value="" placeholder="{% if nbar == 'users' %} Search Users... {% else %} Search Cards... {% endif %}">
-                            </div> -->
                             <button type="submit" class="btn btn-sm btn-success my-2 my-sm-0">
                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
