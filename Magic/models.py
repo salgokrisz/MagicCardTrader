@@ -36,6 +36,7 @@ class Address(models.Model):
 
     def __str__(self):
         return self.user.username
+        
 
 def get_image_url(name, set_name):
         listOfVersions = []
