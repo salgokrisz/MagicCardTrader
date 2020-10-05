@@ -1,0 +1,88 @@
+{% extends 'magic/base.html' %}
+
+{% block title %} Direct Messages {% endblock %}
+
+{% block body %}
+
+<section class="section">
+    <div class="columns is-mobile ">
+        <div class="column is-one-quarter">
+            <aside class="menu basic-text">
+                <p class="menu-label">
+                    <h1 class="title is-2 basic-text">Messages</h1>
+                </p>
+                <ul style="overflow-y: scroll; height: 450px" class="menu-list">
+                    {% for message in d_messages %}
+                        {% if message.user.username != request.user.username %}
+                            <a class="{% if active_direct == message.user.username %}active{% endif %}" href="{% url 'Magic:directs' message.user.username %}">
+                                <div class="box" style="height: 100px;">
+                                    <article class="media">
+                                        <div class="media-left">
+                                            <figure class="image is-32x32">
+                                                <img src="{{ message.user.profile.user_photo.url }}" alt="Profile image" height="80px">
+                                            </figure>
+                                        </div>
+                                        <div class="media-content">
+                                            <div class="content">
+                                                <p>
+                                                    {% if message.is_read == True %}
+                                                        {{ message.user.username }}
+                                                    {% else %}
+                                                        <strong>{{ message.user.username }}</strong>
+                                                    {% endif %}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </article>
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </aside>
+        </div>
+        <div style="overflow-y: scroll; height: 600px;" class="column">
+            {% for direct in directs %}
+                <div class="box">
+                    <article class="media">
+                    <div class="media-left">
+                    </div>
+                    <div class="media-content">
+                        <div class="content">
+                            <p>
+                                <strong>{{ direct.from_user }}</strong> - <small>{{ direct.date|date:'N d G:i' }}</small>
+                            </p>
+                            {{ direct.content }}
+                        </div>
+                    </div>
+                    </article>
+                </div>  
+            {% endfor %}
+           
+        </div>
+        
+    </div>
+    <form role="form" method="POST" action="{% url 'Magic:send' %}">
+        {% csrf_token %}
+        <article class="media mr-7 ml-7">
+            <div class="media-content">
+                <input type="hidden" name="to_user" value="{{ active_direct }}">
+                <div class="field">
+                    <p class="control">
+                        <textarea class="textarea" name="content" placeholder="Send message..."></textarea>
+                    </p>
+                </div>
+                <nav class="level">
+                    <div class="level-left">
+                        <div class="level-item">
+                            <button type="submit" name="action" class="button is-info">Send</button>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </article>
+    </form>
+</section>
+
+
+{% endblock %}

@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'Magic.apps.MagicConfig',
     'users.apps.UsersConfig',
     'shopping_cart.apps.ShoppingCartConfig',
+    'direct_messages.apps.DirectMessagesConfig',
     'crispy_forms',
     'django_countries',
     'django_filters',

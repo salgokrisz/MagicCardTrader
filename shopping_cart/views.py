@@ -15,7 +15,7 @@ import datetime
 from django.utils import timezone
 import stripe
 
-stripe.api_key = "pk_test_51HVekUJly0GQJLGzsXDmnaob6xs4nfDOyKtoRs867birofGl247Q3dtV7xURK9vzPWQWLAlcLd3KWl2Z3PrGIBqJ001FiFfrz5"
+stripe.api_key = "sk_test_51HVekUJly0GQJLGzxKzWxfxh3rcVRamFGGHDTLgcjPs49ZdiGYwmmTeUrEzK6KSMUAwCQ0HRpkpQXVtywWBQuWp000wFB3PUGg"
 
 # `source` is obtained with Stripe.js; see https://stripe.com/docs/payments/accept-a-payment-charges#web-create-token
 

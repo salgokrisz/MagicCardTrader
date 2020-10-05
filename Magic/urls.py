@@ -2,6 +2,7 @@ from django.urls import path, re_path
 from . import views
 from users import views as UsersView
 from shopping_cart import views as CartView
+from direct_messages import views as MessagesView
 
 
 
@@ -53,5 +54,11 @@ urlpatterns = [
     #re_path(r'^checkout/$', CartView.checkout, name="checkout"),
     re_path(r'^success/$', CartView.success, name="purchase_success"),
     re_path(r'^update-transaction/(?P<order_id>[-\w]+)/$', CartView.update_transaction_records, name="update_records"),
+
+    #/messages
+    #re_path(r'^messages/$', MessagesView.messages, name="messages"),
+    path('messages/$', MessagesView.inbox, name="inbox"),
+    path('messages/<username>/$', MessagesView.directs, name="directs"),
+    path('messages/send', MessagesView.send_message, name="send"),
     
 ]
