@@ -43,16 +43,16 @@
         </div>
         <div style="overflow-y: scroll; height: 600px;" class="column">
             {% for direct in directs %}
-                <div class="box">
+        <div class="box" style="{% if direct.from_user == request.user %} background-color: lightblue; {% endif %}">
                     <article class="media">
                     <div class="media-left">
-                    </div>
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>{{ direct.from_user }}</strong> - <small>{{ direct.date|date:'N d G:i' }}</small>
-                            </p>
-                            {{ direct.content }}
+                        <div class="media-content">
+                            <div class="content">
+                                <p>
+                                    <strong>{{ direct.from_user }}</strong> - <small>{{ direct.date|date:'N d G:i' }}</small>
+                                </p>
+                                {{ direct.content }}
+                            </div>
                         </div>
                     </div>
                     </article>

@@ -11,6 +11,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Q
+from django.core.paginator import Paginator
 
 
 def messages(request):
@@ -84,3 +86,34 @@ def send_message(request):
         return redirect('Magic:directs', username=to_user)
     else:
         HttpResponseBadRequest()
+
+@login_required
+def user_search(request):
+    query = request.GET.get('q')
+    context = {}
+
+    if query:
+        users = User.objects.filter(Q(username__icontains=query))
+
+        paginator = Paginator(users, 6)
+        page_number = request.GET.get('page')
+        users_paginator = paginator.get_page(page_number)
+
+        context = {
+            'users': users_paginator,
+        }
+
+        return render(request, 'valami.html', context)
+
+@login_required
+def new_conversation(request, username):
+    from_user = request.user
+    content = 'Hello!'
+    
+    try:
+        to_user = User.objects.get(username=username)
+    except Exception as e:
+        return redirect('Magic:inbox')
+    if from_user != to_user:
+        Message.send_message(from_user, to_user, content)
+    return redirect('Magic:directs', username=username)

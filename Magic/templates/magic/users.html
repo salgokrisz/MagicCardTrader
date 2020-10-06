@@ -7,24 +7,46 @@
     <h1 class="basic-text">Users</h2>
         <table id="user-table">
             <tr>
-                <th><h2><span class="glyphicon glyphicon-user"></span></h2></th>
+                <th><h2><span class="glyphicon glyphicon-user">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z"/>
+                        <path fill-rule="evenodd" d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                        <path fill-rule="evenodd" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"/>
+                    </svg>
+                </span></h2></th>
                 <th>
                     <big> Name</big>
                     <a href="?order_by=username&direction=asc">
-                        <span class="glyphicon glyphicon-chevron-up"></span>
+                        <span class="glyphicon glyphicon-chevron-up">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                            </svg>
+                        </span>
                     </a>
                     <a href="?order_by=username&direction=desc">
-                        <span class="glyphicon glyphicon-chevron-down"></span>
+                        <span class="glyphicon glyphicon-chevron-down">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                        </span>
                     </a>
                     
                 </th>
                 <th>
                     Available Cards
                     <a href="?order_by={{ user.card_set.count }}&direction=desc">
-                        <span class="glyphicon glyphicon-chevron-up"></span>
+                        <span class="glyphicon glyphicon-chevron-up">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                            </svg>
+                        </span>
                     </a>
                     <a href="?order_by={{ user.card_set.count }}t&direction=asc">
-                        <span class="glyphicon glyphicon-chevron-down"></span>
+                        <span class="glyphicon glyphicon-chevron-down">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                        </span>
                     </a>
                 </th>
             </tr>
@@ -35,12 +57,26 @@
                     <a href="#"
                         onmouseover="document.getElementById('place-holder-1').src='{{ user.profile.user_photo.url }}';"
                         onmouseout="document.getElementById('place-holder-1').src='';">
-                            <span class="glyphicon glyphicon-camera" id="span"></span>
+                            <span class="glyphicon glyphicon-camera" id="span">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-camera-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                    <path fill-rule="evenodd" d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/>
+                                </svg>
+                            </span>
                             <img src="" class="img-responsive" id="place-holder-1" style="z-index: 50; position: absolute; width: 5%;" />
                     </a>
                 </td>                  
                 <td class="user-td">
-                    <h3><b><a class="user-td-link" href="{% url 'Magic:user_detail' user.id %}">{{user.get_username}}</a></b></h3>
+                    <h3>
+                        <b><a class="user-td-link" href="{% url 'Magic:user_detail' user.id %}">{{user.get_username}}</a></b>
+                        <a href="{% url 'Magic:new' user.username %}">
+                            <span>
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-envelope-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
+                                </svg>
+                            </span>
+                        </a>
+                    </h3>
                 </td>
                 <td>
                     Available Cards: {{user.card_set.count}}

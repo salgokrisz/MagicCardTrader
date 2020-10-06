@@ -60,5 +60,6 @@ urlpatterns = [
     path('messages/$', MessagesView.inbox, name="inbox"),
     path('messages/<username>/$', MessagesView.directs, name="directs"),
     path('messages/send', MessagesView.send_message, name="send"),
+    path('messages/new/<username>/$', MessagesView.new_conversation, name="new"),
     
 ]
