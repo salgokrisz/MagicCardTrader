@@ -29,6 +29,7 @@ def inbox(request):
     messages = Message.get_messages(user=user)
     active_direct = None
     directs = None
+    total_unread = 0
     
     if messages:
         message = messages[0]
@@ -39,14 +40,15 @@ def inbox(request):
         directs.update(is_read=True)
 
         for message in messages:
-            if message['user'].username == active_direct:
-                message['unread'] = 0
+            total_unread = total_unread + message['unread']
+                #message['unread'] = 0
         
     context = {
         #'directs': directs,
         'd_messages': messages,
         'active_direct': active_direct,
         'nbar': 'messages',
+        'total_unread': total_unread,
     }
 
     return render(request, 'direct_messages/messages.html', context)
@@ -60,16 +62,21 @@ def directs(request, username):
     directs_sent = Message.objects.filter(user=user, from_user__username=username)
     directs = directs_got | directs_sent
     directs.update(is_read=True)
+    total_unread = 0
 
     for message in messages:
         if message['user'].username == username:
             message['unread'] = 0
+
+    for message in messages:
+        total_unread = total_unread + message['unread']
 
     context = {
         'directs': directs,
         'd_messages': messages,
         'active_direct': active_direct,
         'nbar': 'messages',
+        'total_unread': total_unread,
     }
 
     return render(request, 'direct_messages/messages.html', context)

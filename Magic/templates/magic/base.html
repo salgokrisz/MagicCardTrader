@@ -1,6 +1,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load shopping_cart_template_tags %}
+{% load messages_template_tags %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -94,11 +95,17 @@
                             </li>
                             <li class="{% if nbar == 'messages' %} active {% endif %} nav-item">
                                 <a href="{% url 'Magic:inbox' %}" class="nav-link">
+                                    {% if request.user|unread_message_counter != None %}
+                                        {% if request.user|unread_message_counter > 0 %}
+                                            <span class="badge badge-danger z-depth-0"> {{ request.user|unread_message_counter }}</span>
+                                        {% endif %}
+                                    {% endif %}
                                     <span class="glyphicon glyphicon-plus" aria-hidden="true">
                                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-envelope-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
                                         </svg>
-                                    </span>&nbsp; Messages
+                                    </span>&nbsp; 
+                                    Messages 
                                 </a>
                             </li>
                             <li class="{% if nbar == 'add_cards' %} active {% endif %} nav-item">

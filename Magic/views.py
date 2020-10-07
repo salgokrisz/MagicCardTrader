@@ -16,6 +16,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models.functions import Lower
 from shopping_cart.views import get_user_pending_order
+import random
+from datetime import date, timedelta, datetime
+from django.utils import timezone
 
 
 # Create your views here.
@@ -33,12 +36,38 @@ def index(request):
     # lesznek random lapok kirakva - recommended cards from users
     users = User.objects.all()
     cards = Card.objects.all()
+    card_count = cards.count()
+    user_count = users.count()
     profiles = Profile.objects.all()
+    random_cards = []
+    for i in range(0, 4):
+        rnd_number = random.randint(0, card_count-1)
+        if cards[rnd_number].is_ordered == False:
+            random_cards.append(cards[rnd_number])
+        else:
+            random_cards.append(cards[random.randint(0, card_count-1)])
+
+    latest_users = []
+    now = timezone.now()
+    register_scope = now - timedelta(weeks=2)
+    for user in users:
+        if register_scope <= user.profile.date_registered:
+            latest_users.append(user)
+
+    random_users = []
+    for i in range(0, 4):
+        rnd_number = random.randint(0, user_count-1)
+        random_users.append(users[rnd_number])
+
+
     template = loader.get_template('magic/index.html')
     context = {
         'users': users,
         'cards': cards,
         'nbar': 'home',
+        'random_cards': random_cards,
+        'latest_users': latest_users,
+        'random_users': random_users
     }
     return HttpResponse(template.render(context, request))
 
