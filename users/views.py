@@ -2,10 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models.functions import Lower
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from Magic.forms import AddressUpdateForm
 from shopping_cart.views import get_user_pending_order
-from Magic.models import Address
+from Magic.models import Address, Card
 
 
 def register(request):
@@ -40,7 +42,38 @@ def profile(request):
 @login_required
 def profile_cards(request):
     user = request.user
+    #all_cards = Card.objects.filter(is_ordered=False, user=user)
+    all_cards = user.card_set.all()
+    
+    #ordering
+    order_by = request.GET.get('order_by')
+    direction = request.GET.get('direction')
+    if direction == 'desc':
+        if order_by == 'price':
+            all_cards = all_cards.order_by(order_by).reverse()
+        else:
+            all_cards = all_cards.order_by(Lower(order_by)).reverse()
+         
+    elif direction == 'asc':
+        if order_by == 'price':
+            all_cards = all_cards.order_by(order_by)
+        else: 
+            all_cards = all_cards.order_by(Lower(order_by))
+    
+    #pagination
+    paginator = Paginator(all_cards, 5)
+    page = request.GET.get('page', 1)
+    try:
+        cards = paginator.page(page)
+    except PageNotAnInteger:
+        cards = paginator.page(1)
+    except EmptyPage:
+        cards = paginator.page(paginator.num_pages)
     context = {
+        'all_cards': all_cards,
+        'cards': cards,
+        'order_by': order_by,
+        'direction': direction,
         'nbar': 'profile_cards',
     }
     return render(request, 'users/profile_cards.html', context)

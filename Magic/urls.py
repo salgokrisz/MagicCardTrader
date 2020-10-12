@@ -17,6 +17,7 @@ urlpatterns = [
     path('users/', views.users, name="users"),
     # /users/123/
     re_path(r'^users/(?P<user_id>[0-9]+)/$',views.user_detail, name="user_detail"),
+    re_path(r'^users_cards/(?P<user_id>[0-9]+)/$', views.user_detail_cards, name="user_detail_cards"),
 
 
     # /cards

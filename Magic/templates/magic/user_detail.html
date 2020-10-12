@@ -1,43 +1,51 @@
 {% extends 'magic/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Profile {% endblock %}
 
 {% block body %}
-
-    <h5 class="basic-text"><a href="{% url 'Magic:users' %}">Back to all users</a></h5>
-    <h2 class="basic-text">User Details</h2>
-
-    <div class="content-box">
-        <div class="media-body">
-            <div class="panel-body">
+<div class="card">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+          <a href="{% url 'Magic:user_detail' user.id %}" class="nav-link {% if nbar_card == 'users_card_profile' %} active {% endif %}">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'Magic:user_detail_cards' user.id %}" class="nav-link {% if nbar_card == 'users_card_cards' %} active {% endif %}">Cards for sale</a>
+        </li>
+      </ul>
+    </div>
+    <div class="card-body">
+        <div class="card mb-3" style="max-width: 540px;">
+            <div class="row no-gutters">
+              <div class="col-md-4">
                 <img class="img-rounded img-responsive" src="{{ user.profile.user_photo.url }}" width=200px>
-                <h2 class="account-heading basic-text">Name: {{ user.get_username }} </h2>
-                <p class="text-secondary basic-text">Email: {{ user.email }} </p>
-                {% if user.profile.address != None %}
-                    <p class="text-secondary basic-text">
-                        Address: <div class="text-secondary basic-text" style="padding-left:5em">
-                            Street: {{ user.profile.address.street_address }} <br>
-                            Apartment No.: {{ user.profile.address.apartment_number }} <br>
-                            Country: {{ user.profile.address.country }} <br>
-                            Zip Code: {{ user.profile.address.zip_code }} <br>
-
-
-                        </div> </p>
-                {% else %}
-                    <p class="text-secondary basic-text">Address: No address set</p>
-                {% endif %}
-                <p class="small basic-text">Member since: {{ user.profile.date_registered | date:"M d, Y" }}</p>
-                <p class="text-secondary basic-text">Available Cards: {{ user.card_set.count }} </p>
-                <ul>
-                    {% for card in user.card_set.all %}
-                    <li class="basic-text">
-                        <a href="{% url 'Magic:card_detail' card.id %}" >{{ card.name }}</a>
-                        - Price: ${{card.price}}
-                        {% if card.is_foil %}
-                           | <span class="glyphicon glyphicon-star"> Foil</span>
-                        {% endif %}
-                    </li>
-                    {% endfor %}
-                </ul>
+              </div>
+              <div class="col-md-8">
+                <div class="card-body ml-4">
+                    <h2 class="account-heading basic-text">Name: {{ user.get_username }} </h2>
+                    <p class="card-text">Email: {{ user.email }} </p>
+                    {% if user.profile.address is not None %}
+                        <p class="card-text">
+                            Address: <div class="text-secondary basic-text">
+                                Street: {{ user.profile.address.street_address }} <br>
+                                Apartment No.: {{ user.profile.address.apartment_number }} <br>
+                                Country: {{ user.profile.address.country }} <br>
+                                Zip Code: {{ user.profile.address.zip_code }} <br>
+                            </div> </p>
+                            <p class="small basic-text">Member since: {{ user.profile.date_registered | date:"M d, Y" }}</p>
+                    {% else %}
+                        <p class="text-secondary basic-text">Address: No address set -<a href="{% url 'Magic:create_address' %}"> Set now!</a></p>
+                    {% endif %}
+                    </a>
+                </div>
+              </div>
             </div>
         </div>
+            <a href="{% url 'Magic:users' %}">
+                <button class="button btn btn-primary">
+                    Back to all users
+                </button>
+            </a>
     </div>
+</div>
 {% endblock %}

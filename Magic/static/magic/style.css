@@ -35,7 +35,7 @@
     border-bottom: 50ptx;
 }
 
-table{
+/* table{
     width: 80%;
     margin-left: auto;
     margin-right: auto;
@@ -52,7 +52,7 @@ table, th, td {
 th, td{
     padding: 10px;
     height: 40%;
-}
+} */
 
 
 #user-table tr:nth-child(even), #card-table tr:nth-child(even){

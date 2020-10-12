@@ -28,12 +28,6 @@ from django.utils import timezone
 #    return HttpResponse('<h1>Hi this is the mainpage</h1>')
    
 def index(request):
-    # TODO
-    # be lehet jelentkezni - DONE
-    # itt lehet keresni usereket - DONE
-    # lehet keresni lapokat - DONE
-    # lesznek random userek kirakva - recommended users
-    # lesznek random lapok kirakva - recommended cards from users
     users = User.objects.all()
     cards = Card.objects.all()
     card_count = cards.count()
@@ -105,7 +99,8 @@ def users(request):
     return HttpResponse(template.render(context, request))
 
 def user_detail(request, user_id):
-    total_cards = User.objects.all()
+    user = User.objects.get(pk=user_id)
+    total_cards = user.card_set.all()
     template = loader.get_template('magic/user_detail.html')
     try:
         user = User.objects.get(pk=user_id)
@@ -114,16 +109,54 @@ def user_detail(request, user_id):
         raise Http404("User does not exist")
     context = {
         'user': user,
+        'user_id': user.id,
         'card': card,
         'nbar': 'users',
+        'nbar_card': 'users_card_profile',
 
     }
     return HttpResponse(template.render(context, request))
-    #TODO
-    # eladó lapok listája
-    # eladó lapok között a kersés
-    # elérhetőség/átvételi lehetőség
-    # üzenetküldés
+
+def user_detail_cards(request, user_id):
+    user = User.objects.get(pk=user_id)
+    print(user)
+    all_cards = user.card_set.all()
+    print(all_cards)
+
+    #ordering
+    order_by = request.GET.get('order_by')
+    direction = request.GET.get('direction')
+    if direction == 'desc':
+        if order_by == 'price':
+            all_cards = all_cards.order_by(order_by).reverse()
+        else:
+            all_cards = all_cards.order_by(Lower(order_by)).reverse()
+         
+    elif direction == 'asc':
+        if order_by == 'price':
+            all_cards = all_cards.order_by(order_by)
+        else: 
+            all_cards = all_cards.order_by(Lower(order_by))
+
+    #pagination
+    paginator = Paginator(all_cards, 5)
+    page = request.GET.get('page', 1)
+    try:
+        cards = paginator.page(page)
+    except PageNotAnInteger:
+        cards = paginator.page(1)
+    except EmptyPage:
+        cards = paginator.page(paginator.num_pages)
+
+    context = {
+        'all_cards': all_cards,
+        'cards': cards,
+        'user': user,
+        'order_by': order_by,
+        'direction': direction,
+        'nbar_card': 'user_card_cards',
+    }
+    return render(request, 'magic/user_detail_cards.html', context)
 
 def cards(request):
     #template_name to render the view
