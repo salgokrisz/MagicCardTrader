@@ -1,39 +1,121 @@
 {% extends 'magic/base.html' %}
 
-{% block body %}
-    <h5 class="basic-text"><a href="{% url 'Magic:cards' %}">Back to Cards</a></h5>
-    <h2 class="basic-text">Card Details</h2>
+{% block extra_js %}
+<script type="text/javascript">
 
-    <img src="#" class="img-responsive" width="30%">
-    <h3 class="basic-text">Name: {{card.name}} </h3>
-    <h3 class="basic-text">Set: {{card.set_name}} </h3>
-    <h3 class="basic-text">Price: {{card.price}} </h3>
-    <h3 class="basic-text">Foil:
-        {% if card.is_foil %}
-            <span class="glyphicon glyphicon-star">Yes</span>
-        {% else %}
-            No
-        {% endif %}
-    </h3>
-    <h4 class="basic-text">Seller: <a href="{% url 'Magic:user_detail' card.user.id %}">{{card.user}}</a> </h3>
-    {% if request.user == card.user %}
-    <form action="{% url 'Magic:card_update' card.id %}" method="POST" style="display: inline;">
-        {% csrf_token %}
-        <input type="hidden" name="card_id" value="{{card.id}}"/>
-        <button class="btn btn-secondary btn-sm" type="submit">
-            <span class="glyphicon glyphicon-edit">
-                Edit
-            </span>
-        </button>
-    </form>
-    <form action="{% url 'Magic:card_delete' card.id %}" method="POST" style="display: inline;">
-        {% csrf_token %}
-        <input type="hidden" name="card_id" value="{{card.id}}"/>
-        <button class="btn btn-default btn-sm" type="submit">
-            <span class="glyphicon glyphicon-trash">
-                Delete
-            </span>
-        </button>
-    </form>
-    {% endif %}
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the image and insert it inside the modal - use its "alt" text as a caption
+    var img = document.getElementById("myImg");
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    img.onclick = function(){
+        modal.style.display = "block";
+        modalImg.src = this.src;
+        captionText.innerHTML = this.alt;
+    }
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+</script>
+{% endblock extra_js %}
+
+{% block body %}
+    
+    <h2 class="basic-text ml-2">Card Details</h2>
+
+
+    <div class="columns is-mobile is-desktop ml-6"  style="align-self: center;">
+        <div class="column"  style="align-self: center;">
+            <div class="card mb-3" style="max-width: 38rem; align-self: center;">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+
+                        <a class="image-link" href="http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=409741&type=card">
+                            <img id="myImg" src="http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=409741&type=card" class="card-img-top mt-2 mb-2 ml-2 mr-2" alt="...">
+                        </a>
+                    </div>
+                    <div class="col-md-4" style="align-self: center;">
+                        <div class="card-body" style="text-align: right;">
+                            <h3 class="card-title" >{{ card.name }}</h3>
+                            <p class="card-text">
+                                Set: {{ card.set_name }} 
+                            </p>
+                            <p class="card-text">
+                                Seller: <a class="user-td-link" href="{% url 'Magic:user_detail' card.user.id %}">{{ card.user }}</a> 
+                            </p>
+                            <p class="card-text">
+                                price: ${{ card.price }}
+                            </p>
+                            <p class="card-text">
+                                Foil: 
+                                {% if card.is_foil %}
+                                <span>
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-star-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                    </svg>
+                                </span>
+                                {% else %}
+                                <span>
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                                    </svg>
+                                </span>
+                                
+                                {% endif %}
+                            </p>
+                        </div>
+                        {% if request.user != card.user %}
+                        <a href="{% url 'Magic:add_to_cart' card.id %}">
+                            <button type="submit" class="btn btn-success btn-sm ml-4 mb-2">
+                                <span class="glyphicon glyphicon-shopping-cart mr-2">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-cart-plus-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM4 14a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm7 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z"/>
+                                    </svg>
+                                </span>
+                                Add to cart
+                            </button>
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% if request.user == card.user %}
+                    <form action="{% url 'Magic:card_update' card.id %}" method="POST" style="display: inline;" class="mt-4 mb-2 ml-2">
+                        {% csrf_token %}
+                        <input type="hidden" name="card_id" value="{{card.id}}"/>
+                        <button class="btn btn-secondary btn-sm" type="submit">
+                            <span class="glyphicon glyphicon-edit">
+                                Edit
+                            </span>
+                        </button>
+                    </form>
+                    <form action="{% url 'Magic:card_delete' card.id %}" method="POST" style="display: inline;" class="mt-4 ml-1 mb-2">
+                        {% csrf_token %}
+                        <input type="hidden" name="card_id" value="{{ card.id }}"/>
+                        <button class="btn btn-danger btn-sm" type="submit">
+                            <span class="glyphicon glyphicon-trash">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+                                </svg>
+                                Delete
+                            </span>
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+            <a href="{% url 'Magic:cards' %}">
+                <button class="btn btn-info">
+                    Back to all Cards
+                </button>
+            </a>
+        </div>
+    </div>
+
 {% endblock %}

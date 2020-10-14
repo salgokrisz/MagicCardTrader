@@ -32,10 +32,10 @@
                                 Country: {{ user.profile.address.country }} <br>
                                 Zip Code: {{ user.profile.address.zip_code }} <br>
                             </div> </p>
-                            <p class="small basic-text">Member since: {{ user.profile.date_registered | date:"M d, Y" }}</p>
                     {% else %}
-                        <p class="text-secondary basic-text">Address: No address set -<a href="{% url 'Magic:create_address' %}"> Set now!</a></p>
+                        <p class="text-secondary basic-text">Address: No address set</p>
                     {% endif %}
+                        <p class="small basic-text">Member since: {{ user.profile.date_registered | date:"M d, Y" }}</p>
                     </a>
                 </div>
               </div>

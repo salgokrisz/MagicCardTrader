@@ -15,7 +15,7 @@
         </ul>
     </div>
     <div class="card-body">
-        <div class="card mb-3" style="max-width: 540px;">
+        <div class="card mb-3" style="max-width: 640px;">
             <div class="row no-gutters">
                 <div class="col-md-12">
                     <div class="card-body">
@@ -76,18 +76,18 @@
                                 </span>
                             </a>
                             </th>
+                            {% if request.user.is_authenticated %}
+                                {% if request.user != user %}
+                                    <th>
+                                        Cart
+                                    </th>
+                                {% endif %}
+                            {% endif %}
                         </tr>
                         {% for card in cards %}
                         <tr>
                             <td>
                             {{ forloop.counter }}
-                            <a href="{% url 'Magic:card_delete' card.id %}">
-                                <button type="submit" class="btn btn-default btn-sm">
-                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
-                                    </svg>
-                                </button>
-                            </a>
                             </td>
                             <td>
                             <a class="card-td-link" href="{% url 'Magic:card_detail' card.id %}">
@@ -100,6 +100,21 @@
                             <td>
                             {{ card.price }}
                             </td>
+                            {% if request.user.is_authenticated %}
+                                {% if request.user != user %}
+                                    <td>
+                                        <a href="{% url 'Magic:add_to_cart' card.id %}" >
+                                            <button type="submit" class="btn btn-default btn-sm ml-2">
+                                                <span>
+                                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-cart-plus-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM4 14a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm7 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z"/>
+                                                    </svg>
+                                                </span>
+                                            </button>
+                                        </a>
+                                    </td>
+                                {% endif %}
+                            {% endif %}
                         </tr>
                         {% endfor %}
                         </table>

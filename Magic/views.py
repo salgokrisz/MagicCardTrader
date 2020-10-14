@@ -68,9 +68,8 @@ def index(request):
 def users(request):
     template = loader.get_template('magic/users.html')
     all_users = User.objects.all()
-    order_by = request.GET.get('order_by')
-    #order_by = Lower(order_by)
     #ordering
+    order_by = request.GET.get('order_by')
     direction = request.GET.get('direction')
     if direction == 'desc':
          all_users = all_users.order_by(Lower(order_by)).reverse()
@@ -111,7 +110,7 @@ def user_detail(request, user_id):
         'user': user,
         'user_id': user.id,
         'card': card,
-        'nbar': 'users',
+        'nbar': 'user',
         'nbar_card': 'users_card_profile',
 
     }
@@ -119,9 +118,7 @@ def user_detail(request, user_id):
 
 def user_detail_cards(request, user_id):
     user = User.objects.get(pk=user_id)
-    print(user)
     all_cards = user.card_set.all()
-    print(all_cards)
 
     #ordering
     order_by = request.GET.get('order_by')
@@ -217,7 +214,7 @@ def card_detail(request, card_id):
     context = {
         'card': card,
         'user': user,
-        'nbar':'cards',
+        'nbar':'card',
     }
     return HttpResponse(template.render(context, request))
 
@@ -250,7 +247,7 @@ class AddressCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 class CardCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Card
     form_class = CardForm
-    success_url = reverse_lazy('Magic:profile')
+    success_url = reverse_lazy('Magic:profile_cards')
     context = {
         'nbar': 'add_cards',
     }
@@ -266,6 +263,7 @@ class CardCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 class CardUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Card
     fields = ['name', 'set_name', 'price', 'user', 'is_foil', 'is_ordered']
+    success_url = reverse_lazy('Magic:profile_cards')
     #form = self.form_class(Card.name, Card.set_name, Card.price, Card.user, Card.is_foil)
     def test_func(self):
         post = self.get_object()
@@ -276,7 +274,7 @@ class CardUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class CardDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Card
-    success_url = reverse_lazy('Magic:profile')
+    success_url = reverse_lazy('Magic:profile_cards')
 
     def test_func(self):
         post = self.get_object()
