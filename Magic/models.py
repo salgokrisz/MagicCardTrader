@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Count
 from django.urls import reverse
 from mtgsdk import Card as MtgCard
+from mtgsdk import Set as MtgSet
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
@@ -38,15 +39,6 @@ class Address(models.Model):
         return self.user.username
         
 
-def get_image_url(name, set_name):
-        listOfVersions = []
-        versions = MtgCard.where(name=name, set=set_name).all()
-        for card in versions:
-            listOfVersions.append(card.image_url)
-        listOfVersions = list(dict.fromkeys(listOfVersions))
-        print(listOfVersions)
-        return listOfVersions
-
 class Card(models.Model):
     name = models.CharField(max_length = 150)
     set_name = models.CharField(max_length = 150)
@@ -54,7 +46,8 @@ class Card(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     is_foil = models.BooleanField(default=False)
     is_ordered = models.BooleanField(default=False)
-    #imageUrl = models.TextField(default=get_image_url(name, set_name))
+    #image_url = models.TextField(default=get_image_url("set_name", "name"))
+    image_url = models.TextField()
 
     def get_absolute_url(self):
         return reverse('Magic:profile')
@@ -65,6 +58,22 @@ class Card(models.Model):
 
     def __str__ (self):
         return self.name + " - " + self.set_name + " - Price: " + str(self.price)# + " - Seller:\n " + str(self.user)
+
+    def get_image_url(self):
+        versions = []
+        sets = []
+        sets = MtgSet.where(name=self.set_name).all()
+        #set_code = sets[0].code
+        #versions = MtgCard.where(name=card_name, set=set_code).all()
+        versions = MtgCard.where(name=self.name).all()
+        retval = versions[0].image_url
+        """ for card in versions:
+            listOfVersions.append(card.image_url)
+        listOfVersions = list(dict.fromkeys(listOfVersions))
+        print(listOfVersions) """
+        print(retval)
+        return retval
+    
 
 class CardPhoto(models.Model):
     photo = models.FileField(upload_to='card_photos', default='card_photos/Magic_card_back.jpg')

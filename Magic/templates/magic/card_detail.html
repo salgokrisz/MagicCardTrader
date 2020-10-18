@@ -39,7 +39,7 @@
                     <div class="col-md-4">
 
                         <a class="image-link" href="http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=409741&type=card">
-                            <img id="myImg" src="http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=409741&type=card" class="card-img-top mt-2 mb-2 ml-2 mr-2" alt="...">
+                            <img id="myImg" src="{% if card.image_url %} {{ card.image_url }} {% else %} http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=409741&type=card {% endif %}" class="card-img-top mt-2 mb-2 ml-2 mr-2" alt="...">
                         </a>
                     </div>
                     <div class="col-md-4" style="align-self: center;">

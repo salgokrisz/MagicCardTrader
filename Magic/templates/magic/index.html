@@ -8,7 +8,9 @@
         {% for rnd in random_cards %}
         <div class="column">
             <div class="card" style="width: 18rem;">
-                <img src="http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=409741&type=card" class="card-img-top" alt="...">
+                <img src="{% if rnd.image_url %} {{ rnd.image_url }} {% else %} http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=409741&type=card {% endif %}" class="card-img-top" alt="...">
+                 
+<!--                  <img src="{{ rnd.get_imge_url }}" alt="nt" class="card-img-top"> -->
                 <div class="card-body">
                     <h5 class="card-title">{{ rnd.name }}</h5>
                     <p class="card-text">Set: {{ rnd.set_name }} <br>

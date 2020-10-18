@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from Magic.models import Card, Profile, Address
 from django import forms
+from mtgsdk import Card as MtgCard
+from mtgsdk import Set as MtgSet
 
 '''
 class UserForm(forms.ModelForm):
@@ -11,9 +13,12 @@ class UserForm(forms.ModelForm):
         fields = ['username', 'email', 'password']
 '''
 class CardForm(forms.ModelForm):
+    
     class Meta:
         model = Card
-        exclude = ['user']
+        fields = ['name', 'set_name', 'price', 'is_foil']
+        widgets = {'image_url': forms.HiddenInput()}
+
 
 class AddressUpdateForm(forms.ModelForm):
     class Meta:

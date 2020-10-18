@@ -19,6 +19,8 @@ from shopping_cart.views import get_user_pending_order
 import random
 from datetime import date, timedelta, datetime
 from django.utils import timezone
+from mtgsdk import Card as MtgCard
+from mtgsdk import Set as MtgSet
 
 
 # Create your views here.
@@ -37,9 +39,11 @@ def index(request):
     for i in range(0, 4):
         rnd_number = random.randint(0, card_count-1)
         if cards[rnd_number].is_ordered == False:
-            random_cards.append(cards[rnd_number])
-        else:
-            random_cards.append(cards[random.randint(0, card_count-1)])
+            if request.user.is_authenticated:
+                if cards[rnd_number].user != request.user:
+                    random_cards.append(cards[rnd_number])
+            else:
+                random_cards.append(cards[random.randint(0, card_count-1)])
 
     latest_users = []
     now = timezone.now()
@@ -258,7 +262,16 @@ class CardCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             return False
     def form_valid(self, form):
         form.instance.user = self.request.user
+        versions = MtgCard.where(name=form.cleaned_data['name']).all()
+        retval = versions[0].image_url
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.image_url = retval
+            #form.cleaned_data['image_url'] = retval
+            obj.save()
+        
         return super().form_valid(form)
+
 
 class CardUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Card
