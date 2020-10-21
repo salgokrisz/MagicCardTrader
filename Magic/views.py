@@ -39,11 +39,9 @@ def index(request):
     for i in range(0, 4):
         rnd_number = random.randint(0, card_count-1)
         if cards[rnd_number].is_ordered == False:
-            if request.user.is_authenticated:
-                if cards[rnd_number].user != request.user:
-                    random_cards.append(cards[rnd_number])
-            else:
-                random_cards.append(cards[random.randint(0, card_count-1)])
+            random_cards.append(cards[rnd_number])
+        else:
+            random_cards.append(cards[random.randint(0, card_count-1)])
 
     latest_users = []
     now = timezone.now()
@@ -56,6 +54,7 @@ def index(request):
     for i in range(0, 4):
         rnd_number = random.randint(0, user_count-1)
         random_users.append(users[rnd_number])
+    
 
 
     template = loader.get_template('magic/index.html')
@@ -187,7 +186,7 @@ def cards(request):
     all_cards = card_filter.qs
 
     #pagination
-    paginator = Paginator(all_cards, 7)
+    paginator = Paginator(all_cards, 10)
     page = request.GET.get('page', 1)
     try:
         cards = paginator.page(page)
@@ -263,12 +262,15 @@ class CardCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         versions = MtgCard.where(name=form.cleaned_data['name']).all()
-        retval = versions[0].image_url
-        if form.is_valid():
-            obj = form.save(commit=False)
-            obj.image_url = retval
-            #form.cleaned_data['image_url'] = retval
-            obj.save()
+        if len(versions) > 0:
+            retval = versions[0].image_url
+            if retval:
+                if form.is_valid():
+                    obj = form.save(commit=False)
+
+                    obj.image_url = retval
+                #form.cleaned_data['image_url'] = retval
+                    obj.save()
         
         return super().form_valid(form)
 

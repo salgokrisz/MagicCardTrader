@@ -42,7 +42,7 @@
                             <img id="myImg" src="{% if card.image_url %} {{ card.image_url }} {% else %} http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=409741&type=card {% endif %}" class="card-img-top mt-2 mb-2 ml-2 mr-2" alt="...">
                         </a>
                     </div>
-                    <div class="col-md-4" style="align-self: center;">
+                    <div class="col-md-5" style="align-self: center;">
                         <div class="card-body" style="text-align: right;">
                             <h3 class="card-title" >{{ card.name }}</h3>
                             <p class="card-text">
@@ -115,6 +115,13 @@
                     Back to all Cards
                 </button>
             </a>
+            {% if request.user == card.user %}
+                <a href="{% url 'Magic:profile_cards' %}">
+                    <button class="btn btn-info">
+                        Back to my Cards
+                    </button>
+                </a>
+            {% endif %}
         </div>
     </div>
 
