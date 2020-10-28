@@ -261,7 +261,6 @@ class CardCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             return False
     def form_valid(self, form):
         form.instance.user = self.request.user
-<<<<<<< HEAD
         versions = []
         name = form.cleaned_data['name']
         set_name = form.cleaned_data['set_name']
@@ -280,18 +279,6 @@ class CardCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             obj.image_url = retval
             #form.cleaned_data['image_url'] = retval
             obj.save()
-=======
-        versions = MtgCard.where(name=form.cleaned_data['name']).all()
-        if len(versions) > 0:
-            retval = versions[0].image_url
-            if retval:
-                if form.is_valid():
-                    obj = form.save(commit=False)
-
-                    obj.image_url = retval
-                #form.cleaned_data['image_url'] = retval
-                    obj.save()
->>>>>>> 655ee3b1e3e054838dbf8d64b406018d1d4afcb3
         
         return super().form_valid(form)
 
