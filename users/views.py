@@ -92,21 +92,21 @@ def update_profile(request):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-        a_form = AddressUpdateForm(request.POST, instance=request.user)
-        if u_form.is_valid() and p_form.is_valid() and a_form.is_valid():
+        #a_form = AddressUpdateForm(request.POST, instance=request.user)
+        if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            a_form.save()
+            #a_form.save()
             messages.success(request, 'Your account has been updated!')
             return redirect('profile')
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
-        a_form = AddressUpdateForm(instance=request.user.profile.address)
+        #a_form = AddressUpdateForm(instance=request.user.profile.address)
     context = {
         'u_form': u_form,
         'p_form': p_form,
-        'a_form': a_form,
+        #'a_form': a_form,
         'nbar': 'profile',
         'order': existing_order,
     }

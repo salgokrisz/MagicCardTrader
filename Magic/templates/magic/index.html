@@ -40,11 +40,11 @@
         {% endfor %}
     </div>
 </div>
-<h3 class="pt-6 mt-6 pb-4 pl-4">Latest users</h3>
+<h3 class="pt-6 mt-6 pb-4 pl-4">Trending users</h3>
 <div class="container">
     <div class="columns is-desktop is-mobile">
-          {% if latest_users %}
-            {% for user in latest_users %}
+          {% if random_users %}
+            {% for user in random_users %}
             <div class="column">
                 <div class="card" style="width: 18rem;">
                     <img src="{{ user.profile.user_photo.url }}" class="card-img-top" height="80px" alt="user photo">
