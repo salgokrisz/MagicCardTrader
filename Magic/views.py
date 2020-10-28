@@ -262,8 +262,19 @@ class CardCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             return False
     def form_valid(self, form):
         form.instance.user = self.request.user
-        versions = MtgCard.where(name=form.cleaned_data['name']).all()
-        retval = versions[0].image_url
+        versions = []
+        name = form.cleaned_data['name']
+        set_name = form.cleaned_data['set_name']
+        sets = MtgSet.where(name=set_name).all()
+        if len(sets) > 0:
+            code = sets[0].code
+            versions = MtgCard.where(name=name, set=code).all()
+        else:
+            versions = MtgCard.where(name=name).all()
+        if len(versions) > 0:
+            retval = versions[0].image_url
+        else:
+            retval = "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg/revision/latest/scale-to-width-down/250?cb=20140813141013"
         if form.is_valid():
             obj = form.save(commit=False)
             obj.image_url = retval
