@@ -83,7 +83,7 @@ def users(request):
     all_users = user_filter.qs
     #paginator
     page = request.GET.get('page', 1)
-    paginator = Paginator(all_users, 7)
+    paginator = Paginator(all_users, 10)
     try:
         users = paginator.page(page)
     except PageNotAnInteger:
@@ -97,7 +97,7 @@ def users(request):
        'user_filter': user_filter,
        'order_by': order_by,
        'direction': direction,
-        }
+    }
     return HttpResponse(template.render(context, request))
 
 def user_detail(request, user_id):

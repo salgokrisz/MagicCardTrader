@@ -84,7 +84,10 @@ table{
     width: 10%;
 }
 .user-td{
-    color:black
+    color:black;
+}
+.user-tr{
+    height: 56px;
 }
 .user-td-link, .card-td-link{
     color: darkblue;

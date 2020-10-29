@@ -97,7 +97,7 @@
                                 <a href="{% url 'Magic:inbox' %}" class="nav-link">
                                     {% if request.user|unread_message_counter != None %}
                                         {% if request.user|unread_message_counter > 0 %}
-                                            <span class="badge badge-danger z-depth-0"> {{ request.user|unread_message_counter }}</span>
+                                            <span class="badge badge-danger z-depth-0">!</span>
                                         {% endif %}
                                     {% endif %}
                                     <span class="glyphicon glyphicon-plus" aria-hidden="true">

@@ -33,7 +33,7 @@ def inbox(request):
     
     if messages:
         message = messages[0]
-        active_direct = message['user'].username
+        #active_direct = message['user'].username
         directs_got = Message.objects.filter(user=user, to_user=message['user'])
         directs_sent = Message.objects.filter(user=user, from_user=message['user'])
         directs = directs_got | directs_sent
@@ -115,7 +115,7 @@ def user_search(request):
 @login_required
 def new_conversation(request, username):
     from_user = request.user
-    content = 'Hello!'
+    content = ''
     
     try:
         to_user = User.objects.get(username=username)
