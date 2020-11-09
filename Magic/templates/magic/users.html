@@ -4,10 +4,11 @@
 
 <div class=""> <!--class="row"-->
     {% if all_users %}
-    <h1 class="basic-text">Users</h2>
-        <table class="table is-stripped is-hoverable mr-6 ml-6 is-narrow">
-            <tr>
-                <th><h2><span class="glyphicon glyphicon-user">
+    <h1 class="basic-text ml-4">Users</h2>
+        <div class="mr-6 ml-6" style="padding-right: 30px; padding-left: 30px;">
+            <table class="table is-stripped is-hoverable is-narrow center" style="max-width: 1500px; align-self: center; margin-left: auto; margin-right: auto;">
+                <tr>
+                    <th><h2><span class="glyphicon glyphicon-user">
                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z"/>
                         <path fill-rule="evenodd" d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
@@ -34,14 +35,14 @@
                 </th>
                 <th>
                     Available Cards
-                    <!-- <a href="?order_by=card.count&direction=desc">
+                    <!-- <a href="?order_by=card&direction=asc">
                         <span class="glyphicon glyphicon-chevron-up">
                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
                             </svg>
                         </span>
                     </a>
-                    <a href="?order_by={{ user.card_set.count }}t&direction=asc">
+                    <a href="?order_by=card&direction=desc">
                         <span class="glyphicon glyphicon-chevron-down">
                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
@@ -51,49 +52,64 @@
                 </th>
             </tr>
             {% for user in users %}
-            <tr class="user-tr" style="height: 56px;">
-                <!--user profile image-->
-                <td class="img-td user-img-td">
-                    <a href="#"
+                <tr class="user-tr" style="height: 56px;">
+                    <!--user profile image-->
+                    <td class="img-td user-img-td">
+                        <a href="#"
                         onmouseover="document.getElementById('place-holder-{{ forloop.counter }}').src='{{ user.profile.user_photo.url }}';"
                         onmouseout="document.getElementById('place-holder-{{ forloop.counter }}').src='';">
-                            <span class="glyphicon glyphicon-camera" id="span">
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-camera-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
-                                    <path fill-rule="evenodd" d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/>
-                                </svg>
-                            </span>
-                        <img src="" class="img-responsive" id="place-holder-{{ forloop.counter }}" style="z-index: 50; position: absolute; width: 5%;" />
-                    </a>
-                </td>                  
-                <td class="user-td">
-                    <a class="user-td-link" href="{% url 'Magic:user_detail' user.id %}">{{ user.get_username }}</a>
-                    <a href="{% url 'Magic:new' user.username %}">
-                        <span>
-                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-envelope-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
+                        <span class="glyphicon glyphicon-camera" id="span">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-camera-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                <path fill-rule="evenodd" d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/>
                             </svg>
                         </span>
+                        <img src="" class="img-responsive" id="place-holder-{{ forloop.counter }}" style="z-index: 50; position: absolute; width: 5%;" />
                     </a>
-                </td>
-                <td>
-                    Available Cards: {{user.card_set.count}}
-                </td>
-            </tr>
+                    </td>                  
+                    <td class="user-td">
+                        <a class="user-td-link" href="{% url 'Magic:user_detail' user.id %}">{{ user.username }}</a>
+                            <button class="open-button" onclick="document.getElementById('myForm').style.display = 'block';" style="border: none; background-color: transparent;">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-envelope-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="color: blue;">
+                                    <path fill-rule="evenodd" d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
+                                </svg>
+                            </button>
+                            <span class="form-popup" id="myForm">
+                                {{ user.username }}
+                            <form role="form"  method="POST" action="{% url 'Magic:new' user.username %}" class="form-container">
+                                {% csrf_token %}
+                                <input type="text" name="content" placeholder="Send message to {{ user.username }}">
+                                <button type="submit" name="action" class="btn btn-success">Send</button>
+                                <button type="button" class="btn cancel" onclick="document.getElementById('myForm').style.display = 'none';">Cancel</button>
+                            </form>
+                        </span>
+                        <!-- <a href="{% url 'Magic:new' user.username %}">
+                            <span>
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-envelope-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
+                                </svg>
+                            </span>
+                        </a> -->
+                    </td>
+                    <td>
+                        Available Cards: {{ user.card_set.count }}
+                    </td>
+                </tr>
             {% endfor %}
         </table>
+    </div>
         <nav aria-label="Page navigation" class="mb-4">
             {% if users.has_other_pages %}
-                <ul class="pagination justify-content-center">
-                    {% if users.has_previous %}
-                        <li class="page-item"><a href="?page={{ users.previous_page_number }}&order_by={{ order_by }}&direction={{ direction }}" class="page-link">&laquo;</a></li>
-                    {% endif %}
-                    {% for i in users.paginator.page_range %}
-                        {% if users.number == i %}
-                            <li class="page-item active" aria-current="page"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
-                        {% else %}
-                            <li class="page-item"><a href="?page={{ i }}&order_by={{ order_by }}&direction={{ direction }}" class="page-link">{{ i }}</a></li>
-                        {% endif %}
+            <ul class="pagination justify-content-center">
+                {% if users.has_previous %}
+                <li class="page-item"><a href="?page={{ users.previous_page_number }}&order_by={{ order_by }}&direction={{ direction }}" class="page-link">&laquo;</a></li>
+                {% endif %}
+                {% for i in users.paginator.page_range %}
+                {% if users.number == i %}
+                <li class="page-item active" aria-current="page"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                {% else %}
+                <li class="page-item"><a href="?page={{ i }}&order_by={{ order_by }}&direction={{ direction }}" class="page-link">{{ i }}</a></li>
+                {% endif %}
                     {% endfor %}
                     {% if users.has_next %}
                         <li class="page-item"><a href="?page={{ users.next_page_number }}&order_by={{ order_by }}&direction={{ direction }}" class="page-link">&raquo;</a></li>
@@ -116,4 +132,5 @@
     onmouseover="document.getElementById('place-holder-1').src='';"
     onmouseout="document.getElementById('place-holder-1').src='/theme/img/linkpeek-transparent-pixel-placeholder.png';"
 </script>
+
 {% endblock extra_scripts %}

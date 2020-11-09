@@ -75,7 +75,7 @@ def users(request):
     order_by = request.GET.get('order_by')
     direction = request.GET.get('direction')
     if direction == 'desc':
-         all_users = all_users.order_by(Lower(order_by)).reverse()
+        all_users = all_users.order_by(Lower(order_by)).reverse()
     elif direction == 'asc':
         all_users = all_users.order_by(Lower(order_by))
     #filter(search) 

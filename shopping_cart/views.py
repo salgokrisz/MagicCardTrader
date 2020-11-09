@@ -290,7 +290,7 @@ class PaymentView(View):
         try:
             charge = stripe.Charge.create(
                 amount=amount,
-                currency="usd",
+                currency="huf",
                 source=token,
             )
             charge.save()

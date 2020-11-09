@@ -115,12 +115,13 @@ def user_search(request):
 @login_required
 def new_conversation(request, username):
     from_user = request.user
-    content = ''
+    send_content = request.POST.get('content')
     
     try:
         to_user = User.objects.get(username=username)
     except Exception as e:
         return redirect('Magic:inbox')
     if from_user != to_user:
-        Message.send_message(from_user, to_user, content)
+        Message.send_message(from_user, to_user, send_content)
     return redirect('Magic:directs', username=username)
+

@@ -52,7 +52,7 @@
                                 Seller: <a class="user-td-link" href="{% url 'Magic:user_detail' card.user.id %}">{{ card.user }}</a> 
                             </p>
                             <p class="card-text">
-                                price: ${{ card.price }}
+                                price: {{ card.price }} Ft
                             </p>
                             <p class="card-text">
                                 Foil: 

@@ -42,7 +42,7 @@ class Address(models.Model):
 class Card(models.Model):
     name = models.CharField(max_length = 150)
     set_name = models.CharField(max_length = 150)
-    price = models.FloatField()
+    price = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     is_foil = models.BooleanField(default=False)
     is_ordered = models.BooleanField(default=False)

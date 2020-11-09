@@ -9,13 +9,11 @@
         <div class="column">
             <div class="card" style="width: 18rem;">
                 <img src="{% if rnd.image_url %} {{ rnd.image_url }} {% else %} http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=409741&type=card {% endif %}" class="card-img-top" alt="...">
-                 
-<!--                  <img src="{{ rnd.get_imge_url }}" alt="nt" class="card-img-top"> -->
                 <div class="card-body">
                     <h5 class="card-title">{{ rnd.name }}</h5>
                     <p class="card-text">Set: {{ rnd.set_name }} <br>
                         Seller: {{ rnd.user }} <br>
-                        price: {{ rnd.price }} <br>
+                        price: {{ rnd.price }} Ft<br>
                         Foil: 
                         {% if rnd.is_foil %}
                         <span>
@@ -47,15 +45,17 @@
             {% for user in random_users %}
             <div class="column">
                 <div class="card" style="width: 18rem;">
-                    <img src="{{ user.profile.user_photo.url }}" class="card-img-top" height="80px" alt="user photo">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ user.username }}</h5>
-                        <p class="card-text">Available cards: {{ user.card_set.count }}</p>
+                    <div class="column-2" style="height: 300px;">
+                        <img src="{{ user.profile.user_photo.url }}" class="card-img-top" alt="user photo" style="max-height: 300px;">
+                    </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ user.username }}</h5>
+                            <p class="card-text">Available cards: {{ user.card_set.count }}</p>
                             Check seller's cards
                             <a href="{% url 'Magic:user_detail' user.id %}}" class="btn btn-primary">See Profile</a>
                         </div>
-                    </div>
                 </div>
+            </div>
             {% endfor %}
         {% else %}
         <p>No users registered in the past few weeks</p>
