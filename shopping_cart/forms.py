@@ -11,16 +11,22 @@ PAYMENT_COICES = (
 )
 
 class CheckoutForm(forms.Form):
-    street_address = forms.CharField(widget=forms.TextInput(attrs={
-        'placeholder':'1234 Main st'
+    fist_name = forms.CharField(widget=forms.TextInput(attrs={
+        'placeholder':'Takács'
     }))
-    apartment_number = forms.CharField(widget=forms.TextInput(attrs={
-        'placeholder':'Apartment number'
+    last_name = forms.CharField(widget=forms.TextInput(attrs={
+        'placeholder':'László'
+    }))
+    street_address = forms.CharField(widget=forms.TextInput(attrs={
+        'placeholder':'Kossuth Lajos utca'
+    }))
+    apartment_number = forms.IntegerField(widget=forms.NumberInput(attrs={
+        'placeholder':'35'
     }))
     country = CountryField(blank_label='(select country)').formfield(widget=CountrySelectWidget(attrs={
         'class':'custom-select d-block w-100'
     }))
-    zip_code = forms.CharField(widget=forms.TextInput(attrs={
-        'placeholder':'Zip code',
+    zip_code = forms.IntegerField(widget=forms.NumberInput(attrs={
+        'placeholder':'1758',
     }))
-    payment_option = forms.ChoiceField(widget=forms.RadioSelect, choices=PAYMENT_COICES)
+    #payment_option = forms.ChoiceField(widget=forms.RadioSelect, choices=PAYMENT_COICES)

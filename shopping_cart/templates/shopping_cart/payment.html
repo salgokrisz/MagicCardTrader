@@ -112,14 +112,14 @@
 
   <main >
     <div class="container wow fadeIn">
-      <h2 class="my-5 h2 text-center basic-text">Checkout form</h2>
-      <h3 class="basic-text">Shipping address</h3>
-      <div class="row">
-        <div class="col-md-8 mb-4">
-            <div class="card basic-text"> 
+      <h2 class="mt-3 mb-3 h2 text-center basic-text">Payment form</h2>
+      <div class="row mr-6 ml-6 pl-6 pr-6" style="display: block; text-align: center;">
+        <!-- <div class="col-md-8 mb-4"> -->
+          <div class="card basic-text"> 
+            <h3 class="basic-text ml-2 mt-2" style="text-align: left;">Credit or Debit card informations</h3>
                   <script src="https://js.stripe.com/v3/"></script>
               
-                      <form action="." method="POST" id="stripe-form" class="card-body">
+                      <form action="." method="POST" id="stripe-form" class="card-body" style="display: inline-block; text-align: left;">
                           {% csrf_token %}
                           {{ form|crispy }}
                           <div class="stripe-form-row">
@@ -135,7 +135,7 @@
                           <button id="stripeBtn" class="btn btn-primary">Submit Payment</button>
                       </form>
             </div>
-        </div>
+        <!-- </div> -->
       </div>
 
     </div>

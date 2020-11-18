@@ -42,7 +42,7 @@ def add_to_cart(request, item_id):
         user_order.save()
 
     # show confirmation message and redirect back to the same page
-    messages.info(request, "item added to cart")
+    messages.info(request, str(order_item.card.name) + " added to cart!")
     return redirect(reverse('Magic:cards'))
 
 
@@ -55,7 +55,7 @@ def delete_from_cart(request, item_id):
     card.save()
     if item_to_delete.exists():
         item_to_delete[0].delete()
-        messages.info(request, "Item has been deleted")
+        messages.info(request, str(card.name) + " has been deleted!")
     return redirect(reverse('Magic:order_summary'))
 
 
@@ -89,96 +89,6 @@ def checkout(request):
 @login_required()
 def process_payment(request, order_id):
     return redirect(reverse('Magic:update_records', kwargs={'order_id': order_id,}))
-
-""" @login_required()
-def checkout(request, **kwargs):
-    #client_token = generate_client_token()
-    existing_order = get_user_pending_order(request)
-    publishKey = settings.STRIPE_PUBLISHABLE_KEY
-    if request.method == 'POST':
-        token = request.POST.get('stripeToken', False)
-        if token:
-            try:
-                charge = stripe.Charge.create(
-                    amount=100*existing_order.get_cart_total(),
-                    currency='usd',
-                    description='Example charge',
-                    source=token,
-                )
-
-                return redirect(reverse('Magic:update_records',
-                        kwargs={
-                            'token': token
-                        })
-                    )
-            except stripe.CardError as e:
-                message.info(request, "Your card has been declined.")
-        else:
-            result = transact({
-                'amount': existing_order.get_cart_total(),
-                'payment_method_nonce': request.POST['payment_method_nonce'],
-                'options': {
-                    "submit_for_settlement": True
-                }
-            })
-
-            if result.is_success or result.transaction:
-                return redirect(reverse('Magic:update_records',
-                        kwargs={
-                            'token': result.transaction.id
-                        })
-                    )
-            else:
-                for x in result.errors.deep_errors:
-                    messages.info(request, x)
-                return redirect(reverse('Magic:checkout'))
-            
-    context = {
-        'order': existing_order,
-        #'client_token': client_token,
-        #'STRIPE_PUBLISHABLE_KEY': publishKey
-    }
-
-    return render(request, 'shopping_cart/checkout.html', context) """
-
-""" @login_required()
-def update_transaction_records(request, token):
-    # get the order being processed
-    order_to_purchase = get_user_pending_order(request)
-
-    # update the placed order
-    order_to_purchase.is_ordered=True
-    order_to_purchase.date_ordered=datetime.datetime.now()
-    order_to_purchase.save()
-    
-    # get all items in the order - generates a queryset
-    order_items = order_to_purchase.items.all()
-
-    # update order items
-    order_items.update(is_ordered=True, date_ordered=datetime.datetime.now())
-
-    # Add cards to user profile
-    user_profile = get_object_or_404(Profile, user=request.user)
-    # get the cards from the items
-    order_cards = [item.card for item in order_items]
-    user_profile.card_set.add(*order_cards)
-    user_profile.save()
-
-    
-    # create a transaction
-    transaction = Transaction(profile=request.user.profile,
-                            token=token,
-                            order_id=order_to_purchase.id,
-                            amount=order_to_purchase.get_cart_total(),
-                            success=True)
-    # save the transcation (otherwise doesn't exist)
-    transaction.save()
-
-
-    # send an email to the customer
-    # look at tutorial on how to send emails with sendgrid
-    messages.info(request, "Thank you! Your purchase was successful!")
-    return redirect(reverse('users:profile')) """
 
 
 def update_transaction_records(request, order_id):

@@ -18,24 +18,19 @@
       </ul>
     </div>
     <div class="card-body">
-        <div class="card mb-3" style="max-width: 540px;">
+        <div class="card mb-3" style="max-width: 550px; max-height: 500px;">
             <div class="row no-gutters">
               <div class="col-md-8">
                 <div class="card-body">
                     <p class="text-secondary basic-text">Previous Orders: {{ user.profile.order_set.count }} </p>
-                    <ul>
+                    <ul style="overflow-y: scroll; height: 400px; width: 520px;">
                         {% for order in user.profile.order_set.all %}
-                        <li class="basic-text">
-                            {{ order }} - {{ order.date_ordered }}
-                            
+                        <li class="">
+                            {{ order }} - {{ order.date_ordered }} - {{ order.payment.amount }} Ft
+                            <hr>
                         </li>
                         {% endfor %}
                     </ul>
-                    <a href="{% url 'Magic:card_add' %}">
-                        <button class="btn btn-warning">
-                            <small>Add card</small>
-                        </button>
-                    </a>
                 </div>
               </div>
             </div>

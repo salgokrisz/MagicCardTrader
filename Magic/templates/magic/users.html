@@ -69,18 +69,17 @@
                     </td>                  
                     <td class="user-td">
                         <a class="user-td-link" href="{% url 'Magic:user_detail' user.id %}">{{ user.username }}</a>
-                            <button class="open-button" onclick="document.getElementById('myForm').style.display = 'block';" style="border: none; background-color: transparent;">
+                            <button class="open-button" onclick="document.getElementById('message_form-{{ forloop.counter }}').style.display = 'block';" style="border: none; background-color: transparent;">
                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-envelope-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="color: blue;">
                                     <path fill-rule="evenodd" d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
                                 </svg>
                             </button>
-                            <span class="form-popup" id="myForm">
-                                {{ user.username }}
-                            <form role="form"  method="POST" action="{% url 'Magic:new' user.username %}" class="form-container">
+                            <span class="form-popup" id="message_form-{{ forloop.counter }}">
+                                <form role="form"  method="POST" action="{% url 'Magic:new' user.username %}" class="form-container">
                                 {% csrf_token %}
                                 <input type="text" name="content" placeholder="Send message to {{ user.username }}">
                                 <button type="submit" name="action" class="btn btn-success">Send</button>
-                                <button type="button" class="btn cancel" onclick="document.getElementById('myForm').style.display = 'none';">Cancel</button>
+                                <button type="button" class="btn cancel" onclick="document.getElementById('message_form-{{ forloop.counter }}').style.display = 'none';">Cancel</button>
                             </form>
                         </span>
                         <!-- <a href="{% url 'Magic:new' user.username %}">

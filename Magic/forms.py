@@ -17,7 +17,12 @@ class CardForm(forms.ModelForm):
     class Meta:
         model = Card
         fields = ['name', 'set_name', 'price', 'is_foil']
-        widgets = {'image_url': forms.HiddenInput()}
+        widgets = {
+            'image_url': forms.HiddenInput(),
+            'name': forms.TextInput(attrs={'placeholder':'e.g. Rhystic Study'}),
+            'set_name': forms.TextInput(attrs={'placeholder':'e.g. Prophecy'}),
+            'price': forms.NumberInput(attrs={'placeholder':'Ft'}),
+        }
 
 
 class AddressUpdateForm(forms.ModelForm):

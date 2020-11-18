@@ -29,7 +29,7 @@
 
 {% block body %}
     
-    <h2 class="basic-text ml-2">Card Details</h2>
+    <h2 class="basic-text ml-4 mt-2">Card Details</h2>
 
 
     <div class="columns is-mobile is-desktop ml-6"  style="align-self: center;">
@@ -52,7 +52,7 @@
                                 Seller: <a class="user-td-link" href="{% url 'Magic:user_detail' card.user.id %}">{{ card.user }}</a> 
                             </p>
                             <p class="card-text">
-                                price: {{ card.price }} Ft
+                                Price: {{ card.price }} Ft
                             </p>
                             <p class="card-text">
                                 Foil: 

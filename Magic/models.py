@@ -36,7 +36,7 @@ class Address(models.Model):
     zip_code = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.user.username
+        return str(self.country) + " " + self.street_address + " " + self.apartment_number + " " + self.zip_code
         
 
 class Card(models.Model):
