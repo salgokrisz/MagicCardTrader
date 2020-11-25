@@ -59,7 +59,7 @@ def delete_from_cart(request, item_id):
     return redirect(reverse('Magic:order_summary'))
 
 
-def get_user_pending_order(request):
+""" def get_user_pending_order(request):
     # get order for the correct user
     user_profile = get_object_or_404(Profile, user=request.user.id)
     order = Order.objects.filter(owner=user_profile, is_ordered=False)
@@ -67,8 +67,8 @@ def get_user_pending_order(request):
         # get the only order in the list of filtered orders
         return order[0]
     return 0
-
-@login_required()
+ """
+""" @login_required()
 def order_details(request, **kwargs):
     existing_order = get_user_pending_order(request)
     context = {
@@ -76,8 +76,8 @@ def order_details(request, **kwargs):
         'nbar':'order-summary',
     }
     return render(request, 'shopping_cart/order_summary.html', context)
-
-@login_required()
+ """
+""" @login_required()
 def checkout(request):
     existing_order = get_user_pending_order(request)
     context = {
@@ -85,11 +85,11 @@ def checkout(request):
         'nbar':'order-summary',
     }
     return render(request, 'shopping_cart/checkout.html', context)
-
-@login_required()
+ """
+""" @login_required()
 def process_payment(request, order_id):
     return redirect(reverse('Magic:update_records', kwargs={'order_id': order_id,}))
-
+ """
 
 def update_transaction_records(request, order_id):
     # get the order being processed
@@ -177,7 +177,6 @@ class CheckoutView(LoginRequiredMixin, View):
             messages.error(self.request, "You do not have an active order!")
             return redirect('Magic:order-summary')
         
-
 class PaymentView(View):
     def get(self, *args, **kwargs):
         # order

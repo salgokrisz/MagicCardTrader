@@ -11,13 +11,11 @@ urlpatterns = [
     # /home/
     path('', views.index, name='index'),
 
-    # /users/
-    #path('users/', views.UsersView.as_view(), name="users"), #generic views
-    #re_path(r'^users/(?P<pk>[0-9]+)/$',views.UserDetailView.as_view(), name="user_detail"), #generic views
     path('users/', views.users, name="users"),
     # /users/123/
     re_path(r'^users/(?P<user_id>[0-9]+)/$',views.user_detail, name="user_detail"),
     re_path(r'^users_cards/(?P<user_id>[0-9]+)/$', views.user_detail_cards, name="user_detail_cards"),
+    re_path(r'^update_address/$', views.AddressCreate.as_view(), name="create_address"),
 
 
     # /cards
@@ -29,20 +27,16 @@ urlpatterns = [
     # cards/edit
     re_path(r'^cards/(?P<pk>[0-9]+)/edit/$', views.CardUpdate.as_view(), name="card_update"),
     # cards/delete
-     re_path(r'^cards/(?P<pk>[0-9]+)/delete/$', views.CardDelete.as_view(), name="card_delete"),
-
-    #/about/
-    path('about/', views.about, name='about'),
-
+    re_path(r'^cards/(?P<pk>[0-9]+)/delete/$', views.CardDelete.as_view(), name="card_delete"),
+    
     #re_path(r'^register/$', views.UserFormView.as_view(), name='register'),
     #/register, update_profile
+    re_path(r'^register/$', UsersView.register, name="register"),
     re_path(r'^profile/$', UsersView.profile, name="profile"),
     re_path(r'^profile_cards/$', UsersView.profile_cards, name="profile_cards"),
     re_path(r'^profile_purchases/$', UsersView.profile_purchases, name="profile_purchases"),
-    re_path(r'^register/$', UsersView.register, name="register"),
     re_path(r'^update_profile/$', UsersView.update_profile, name="update_profile"),
 
-    re_path(r'^update_address/$', views.AddressCreate.as_view(), name="create_address"),
 
     #/cart urls
     re_path(r'add-to-cart/(?P<item_id>[-\w]+)/$', CartView.add_to_cart, name="add_to_cart"),

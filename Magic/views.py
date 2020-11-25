@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models.functions import Lower
-from shopping_cart.views import get_user_pending_order
+#from shopping_cart.views import get_user_pending_order
 import random
 from datetime import date, timedelta, datetime
 from django.utils import timezone
@@ -221,7 +221,7 @@ def card_detail(request, card_id):
     }
     return HttpResponse(template.render(context, request))
 
-def about(request):
+
     return HttpResponse('<h3>Magic Card Trader About</h3>')
 
 class AddressCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):

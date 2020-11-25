@@ -6,7 +6,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models.functions import Lower
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from Magic.forms import AddressUpdateForm
-from shopping_cart.views import get_user_pending_order
+#from shopping_cart.views import get_user_pending_order
 from Magic.models import Address, Card
 
 
