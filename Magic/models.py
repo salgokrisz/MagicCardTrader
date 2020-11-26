@@ -59,31 +59,13 @@ class Card(models.Model):
     def __str__ (self):
         return self.name + " - " + self.set_name + " - Price: " + str(self.price)# + " - Seller:\n " + str(self.user)
 
-    def get_image_url(self):
-        versions = []
-        sets = []
-        sets = MtgSet.where(name=self.set_name).all()
-        #set_code = sets[0].code
-        #versions = MtgCard.where(name=card_name, set=set_code).all()
-        versions = MtgCard.where(name=self.name).all()
-        retval = versions[0].image_url
-        """ for card in versions:
-            listOfVersions.append(card.image_url)
-        listOfVersions = list(dict.fromkeys(listOfVersions))
-        print(listOfVersions) """
-        print(retval)
-        return retval
     
 
 class CardPhoto(models.Model):
     photo = models.FileField(upload_to='card_photos', default='card_photos/Magic_card_back.jpg')
 
 # after creating a new model we need to migrate it into the database.
-# like this
-# py manage.py makemigrations Magic
-# py manage.py sqlmigrate Magic 0001(or what ever the migration number is)
-# py manage.py migrate
-
-# it is not yet migrated
-# maybe we change the structure to user -> card, so there will be users and they will have cards that they can sell.
-# first we should finish or at least countinue the tutorial ...
+# like this:
+#   py manage.py makemigrations Magic
+#   py manage.py sqlmigrate Magic 0001(or what ever the migration number is)
+#   py manage.py migrate
