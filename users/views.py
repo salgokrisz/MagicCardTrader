@@ -88,7 +88,7 @@ def profile_purchases(request):
 
 @login_required
 def update_profile(request):
-    existing_order = get_user_pending_order(request)
+    #existing_order = get_user_pending_order(request)
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
@@ -108,7 +108,7 @@ def update_profile(request):
         'p_form': p_form,
         #'a_form': a_form,
         'nbar': 'profile',
-        'order': existing_order,
+        #'order': existing_order,
     }
     return render(request, 'users/update.html', context)
 

@@ -2,3 +2,4 @@ django-crispy-forms
 django-countries
 django-filter
 mtgsdk
+braintree

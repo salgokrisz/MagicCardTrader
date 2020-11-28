@@ -4,11 +4,11 @@ from django.contrib.auth import get_user_model
 from Magic import views as MagicViews
 from users import views as UserViews
 from direct_messages import views as MessagesViews
-from shopping_cart import views as CartViews
 from Magic.models import Profile, Address, Card
 from Magic.forms import CardForm, AddressUpdateForm
 import json
 from django.contrib.auth.models import User
+from django_countries import countries
 
 
 # Create your tests here.
@@ -53,70 +53,6 @@ class TestUrls(SimpleTestCase):
     def test_card_update_url_is_resolved(self):
         url = reverse('Magic:card_update', args=[20])
         self.assertEquals(resolve(url).func.view_class, MagicViews.CardUpdate)
-
-    #Tests For Users App Urls
-    def test_register_url_resolved(self):
-        url = reverse('Magic:register')
-        self.assertEquals(resolve(url).func, UserViews.register)
-
-    def test_profile_url_resolved(self):
-        url = reverse('Magic:profile')
-        self.assertEquals(resolve(url).func, UserViews.profile)
-
-    def test_profile_cards_url_resolved(self):
-        url = reverse('Magic:profile_cards')
-        self.assertEquals(resolve(url).func, UserViews.profile_cards)
-
-    def test_profile_purchase_url_resolved(self):
-        url = reverse('Magic:profile_purchases')
-        self.assertEquals(resolve(url).func, UserViews.profile_purchases)
-    
-    def test_update_profile_url_resolved(self):
-        url = reverse('Magic:update_profile')
-        self.assertEquals(resolve(url).func, UserViews.update_profile)
-
-    #Test For Messages App Urls
-    def test_inbox_url_resolved(self):
-        url = reverse('Magic:inbox')
-        self.assertEquals(resolve(url).func, MessagesViews.inbox)
-
-    def test_directs_url_resolved(self):
-        url = reverse('Magic:directs', args=[20])
-        self.assertEquals(resolve(url).func, MessagesViews.directs)
-
-    def test_send_url_resolved(self):
-        url = reverse('Magic:send')
-        self.assertEquals(resolve(url).func, MessagesViews.send_message)
-
-    def test_new_url_resolved(self):
-        url = reverse('Magic:new', args=[20])
-        self.assertEquals(resolve(url).func, MessagesViews.new_conversation)
-
-    #Test For Cart App Urls
-    def test_add_url_resolved(self):
-        url = reverse('Magic:add_to_cart', args=[20])
-        self.assertEquals(resolve(url).func, CartViews.add_to_cart)
-
-    def test_delete_url_resolved(self):
-        url = reverse('Magic:delete_from_cart', args=[20])
-        self.assertEquals(resolve(url).func, CartViews.delete_from_cart)
-
-    def test_order_summary_url_resolved(self):
-        url = reverse('Magic:order_summary')
-        self.assertEquals(resolve(url).func.view_class, CartViews.OrderSummaryView)
-
-    def test_checkout_url_resolved(self):
-        url = reverse('Magic:checkout')
-        self.assertEquals(resolve(url).func.view_class, CartViews.CheckoutView)
-
-    def test_payment_url_resolved(self):
-        url = reverse('Magic:payment')
-        self.assertEquals(resolve(url).func.view_class, CartViews.PaymentView)
-
-    """ def test_success_url_resolved(self):
-        url = reverse('Magic:success')
-        self.assertEquals(resolve(url).func, CartViews.success) """
-
 
 class TestViews(TestCase):
 
