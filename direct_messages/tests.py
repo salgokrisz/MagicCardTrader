@@ -39,9 +39,11 @@ class TestViews(TestCase):
 
     def test_inbox(self):
         self.assertEquals(self.client.get(self.inbox).status_code, 200)
+        self.assertTemplateUsed(self.client.get(self.inbox), 'direct_messages/messages.html')
 
     def test_directs(self):
         self.assertEquals(self.client.get(self.directs).status_code, 200)
+        #self.assertRedirects(self.client.get(self.directs), '/messages/' + self.user2.username + '/$', status_code=200)
 
     def test_send_msg(self):
         self.client.post(reverse('Magic:directs', args=[self.user2.username]), kwargs={'content': 'content'})
@@ -49,3 +51,6 @@ class TestViews(TestCase):
 
     def test_new_conversation(self):
         self.assertRedirects(self.client.get(self.new), '/messages/' + self.user2.username + '/$', status_code=302)
+
+    def test_new_conversation_no_valid_target_user(self):
+        self.assertRedirects(self.client.get(reverse('Magic:new', args=['not_valid_username'])), '/messages/$', status_code=302)

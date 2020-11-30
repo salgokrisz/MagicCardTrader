@@ -54,6 +54,7 @@ class TestViews(TestCase):
     def test_add_to_cart_GET_logged_in(self):
         self.login = self.client.login(username='test_user', password='pass')
         self.assertEquals(self.client.get(self.add_to_cart_url).status_code, 302)
+        self.assertEquals(self.client.get(shopping_cart_template_tags.cart_item_counter(self.user), 1))
         self.assertRedirects(self.client.get(self.add_to_cart_url), 'Magic:cards', status_code=302)
     
     def test_add_to_cart_GET_not_logged_in(self):
@@ -62,11 +63,13 @@ class TestViews(TestCase):
     def test_delete_from_cart_GET_logged_in(self):
         self.login = self.client.login(username='test_user', password='pass')
         self.assertRedirects(self.client.get(self.add_to_cart_url), 'Magic:order_summary', status_code=302)
+        self.assertEquals(self.client.get(shopping_cart_template_tags.cart_item_counter(self.user), 0))
 
     def test_delete_from_cart_GET_not_logged_in(self):
         self.assertRedirects(self.client.get(self.add_to_cart_url), 'Magic:login', status_code=302)
 
     def test_checkout_view_form_is_valid(self):
+        self.login = self.client.login(username='test_user', password='pass')
         form = CheckoutForm(
             data={
                 'first_name':'first_name',
