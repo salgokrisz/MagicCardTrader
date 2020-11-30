@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.core.paginator import Paginator
+from django.contrib import messages as DjangoMessages
 
 
 def messages(request):
@@ -92,25 +93,9 @@ def send_message(request):
         Message.send_message(from_user, to_user, content)
         return redirect('Magic:directs', username=to_user)
     else:
-        HttpResponseBadRequest()
+        DjangoMessages.info(request, "Your message could not be delivered")
+        return redirect('Magic:inbox')
 
-@login_required
-def user_search(request):
-    query = request.GET.get('q')
-    context = {}
-
-    if query:
-        users = User.objects.filter(Q(username__icontains=query))
-
-        paginator = Paginator(users, 6)
-        page_number = request.GET.get('page')
-        users_paginator = paginator.get_page(page_number)
-
-        context = {
-            'users': users_paginator,
-        }
-
-        return render(request, 'valami.html', context)
 
 @login_required
 def new_conversation(request, username):

@@ -66,6 +66,9 @@ class TestViews(TestCase):
         self.card_update = MagicViews.CardUpdate()
         self.card_delete = MagicViews.CardDelete()
         self.address_update = MagicViews.AddressCreate()
+        self.new_user = User.objects.create_user('test_user', 'test@test.com', 'pass')
+        self.new_card = Card.objects.create(name="card_name", set_name='set_name', price=10, user=User.objects.get(username='test_user'), is_foil=True, is_ordered=False, image_url='')
+        self.login = self.client.login(username='test_user', password='pass')
 
     def test_users_GET(self):
         response = self.client.get(self.users_url)
@@ -107,6 +110,8 @@ class TestViews(TestCase):
 
     def test_card_delete(self):
         self.assertEqual(self.card_delete.model, Card)
+        post_response = self.client.post(reverse('Magic:card_delete', args=[self.new_card.id]), follow=True)
+        self.assertRedirects(post_response, '/profile_cards/', status_code=302)
         
 
 class TestForms(SimpleTestCase):
