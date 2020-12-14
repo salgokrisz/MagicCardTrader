@@ -12,6 +12,7 @@ class Message(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
 
+    # creating the two instances of one message in the DB and save it to both users (sender, receiver)
     def send_message(sender, to_user, content):
         from_message = Message(
             user = sender,
@@ -31,6 +32,7 @@ class Message(models.Model):
 
         return from_message
 
+    # getting the messages owned by user(param)
     def get_messages(user):
         users = []
         messages = Message.objects.filter(user=user).values('to_user').annotate(last=Max('date')).order_by('-last')

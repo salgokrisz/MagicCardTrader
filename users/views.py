@@ -9,7 +9,8 @@ from Magic.forms import AddressUpdateForm
 #from shopping_cart.views import get_user_pending_order
 from Magic.models import Address, Card
 
-
+# view that controls the registration form and validates it
+# adds new user to the DB
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -26,7 +27,7 @@ def register(request):
     }
     return render(request, 'users/register.html', context)
 
-
+# sends the data to the frontend of the logged in user
 @login_required
 def profile(request):
     #existing_order = get_user_pending_order(request)
@@ -39,6 +40,7 @@ def profile(request):
     }
     return render(request, 'users/profile.html', context)
 
+# sends the content of the logged in user to the frontend (his/her own cards)
 @login_required
 def profile_cards(request):
     user = request.user
@@ -78,6 +80,7 @@ def profile_cards(request):
     }
     return render(request, 'users/profile_cards.html', context)
 
+# sends the content of the logged in user to the frontend (his/her own purchases)
 @login_required
 def profile_purchases(request):
     user = request.user
@@ -86,9 +89,9 @@ def profile_purchases(request):
     }
     return render(request, 'users/profile_purchases.html', context)
 
+# view that controls the user and the profile forms and vildates them
 @login_required
 def update_profile(request):
-    #existing_order = get_user_pending_order(request)
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)

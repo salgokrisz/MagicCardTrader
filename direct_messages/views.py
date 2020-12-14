@@ -24,6 +24,7 @@ def messages(request):
 
     return render(request, 'direct_messages/messages.html', context)
 
+# filtering the messages where the logged in user is the sender and the receiver
 @login_required
 def inbox(request):
     user = request.user
@@ -38,7 +39,7 @@ def inbox(request):
         directs_got = Message.objects.filter(user=user, to_user=message['user'])
         directs_sent = Message.objects.filter(user=user, from_user=message['user'])
         directs = directs_got | directs_sent
-        directs.update(is_read=True)
+        #directs.update(is_read=False)
 
         for message in messages:
             total_unread = total_unread + message['unread']
@@ -54,6 +55,9 @@ def inbox(request):
 
     return render(request, 'direct_messages/messages.html', context)
 
+# filtering message objects where the sender and the receiver is the chosen user
+# chosen username got in parameter
+# sending the message object to the template
 @login_required
 def directs(request, username):
     user = request.user
@@ -82,6 +86,7 @@ def directs(request, username):
 
     return render(request, 'direct_messages/messages.html', context)
 
+# send message to the user got from POST req
 @login_required
 def send_message(request):
     from_user = request.user
@@ -97,6 +102,8 @@ def send_message(request):
         return redirect('Magic:inbox')
 
 
+# starting new conv.
+# send the first message to the user got in param
 @login_required
 def new_conversation(request, username):
     from_user = request.user

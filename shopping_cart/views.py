@@ -19,6 +19,8 @@ stripe.api_key = "sk_test_51HVekUJly0GQJLGzxKzWxfxh3rcVRamFGGHDTLgcjPs49ZdiGYwmm
 
 # `source` is obtained with Stripe.js; see https://stripe.com/docs/payments/accept-a-payment-charges#web-create-token
 
+
+# adding to cart view
 @login_required()
 def add_to_cart(request, item_id):
     # get the user profile
@@ -45,7 +47,7 @@ def add_to_cart(request, item_id):
     messages.info(request, str(order_item.card.name) + " added to cart!")
     return redirect(reverse('Magic:cards'))
 
-
+# deleting form card view
 @login_required()
 def delete_from_cart(request, item_id):
     item_to_delete = OrderItem.objects.filter(pk=item_id)
@@ -58,38 +60,6 @@ def delete_from_cart(request, item_id):
         messages.info(request, str(card.name) + " has been deleted!")
     return redirect(reverse('Magic:order_summary'))
 
-
-""" def get_user_pending_order(request):
-    # get order for the correct user
-    user_profile = get_object_or_404(Profile, user=request.user.id)
-    order = Order.objects.filter(owner=user_profile, is_ordered=False)
-    if order.exists():
-        # get the only order in the list of filtered orders
-        return order[0]
-    return 0
- """
-""" @login_required()
-def order_details(request, **kwargs):
-    existing_order = get_user_pending_order(request)
-    context = {
-        'order': existing_order,
-        'nbar':'order-summary',
-    }
-    return render(request, 'shopping_cart/order_summary.html', context)
- """
-""" @login_required()
-def checkout(request):
-    existing_order = get_user_pending_order(request)
-    context = {
-        'order': existing_order,
-        'nbar':'order-summary',
-    }
-    return render(request, 'shopping_cart/checkout.html', context)
- """
-""" @login_required()
-def process_payment(request, order_id):
-    return redirect(reverse('Magic:update_records', kwargs={'order_id': order_id,}))
- """
 
 def update_transaction_records(request, order_id):
     # get the order being processed
@@ -119,13 +89,14 @@ def update_transaction_records(request, order_id):
     messages.info(request, "Thank you! Your purchase was successful!")
     return redirect(reverse('Magic:profile'))
 
+
 def success(request, **kwargs):
     # a view signifying the transcation was successful
     return render(request, 'shopping_cart/purchase_success.html', {})
 
 
 #-------------
-
+# view that sends the order summary records to the frontend
 class OrderSummaryView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
@@ -139,6 +110,7 @@ class OrderSummaryView(LoginRequiredMixin, View):
             messages.error(self.request, "You do not have an active order!")
             return redirect('Magic:cards')
 
+# view that contorls the checkout form and validates it
 class CheckoutView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         #form
@@ -176,7 +148,8 @@ class CheckoutView(LoginRequiredMixin, View):
         except ObjectDoesNotExist:
             messages.error(self.request, "You do not have an active order!")
             return redirect('Magic:order-summary')
-        
+
+# view that communicates with the Stripe API and makes the payment complete        
 class PaymentView(View):
     def get(self, *args, **kwargs):
         # order
@@ -184,7 +157,6 @@ class PaymentView(View):
     
     def post(self, *args, **kwargs):
         order = Order.objects.get(owner=self.request.user.profile, is_ordered=False)
-        #token = self.request.POST.get('stripeToken')
         token = stripe.Token.create(
             card={
                 "number": "4242424242424242",
@@ -214,11 +186,7 @@ class PaymentView(View):
             #order_cards = [item.card for item in order_items]
             for item in order_items:
                 user.user.card_set.add(item.card)
-                #item.card.update(user=user)
-                #item.card.save()
                 user.save()
-            #user.card_set.add(order_cards)
-            #user.save()
                     
             #create payment
             payment = Payment()

@@ -4,14 +4,8 @@ from django import forms
 from mtgsdk import Card as MtgCard
 from mtgsdk import Set as MtgSet
 
-'''
-class UserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput)
-    
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password']
-'''
+# form for card add and update
+# defining the fields of the form
 class CardForm(forms.ModelForm):
     
     class Meta:
@@ -24,7 +18,8 @@ class CardForm(forms.ModelForm):
             'price': forms.NumberInput(attrs={'placeholder':'Ft'}),
         }
 
-
+# address form
+# defining the fields
 class AddressUpdateForm(forms.ModelForm):
     class Meta:
         model = Address

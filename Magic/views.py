@@ -15,20 +15,17 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models.functions import Lower
-#from shopping_cart.views import get_user_pending_order
 import random
 from datetime import date, timedelta, datetime
 from django.utils import timezone
 from mtgsdk import Card as MtgCard
 from mtgsdk import Set as MtgSet
+#from shopping_cart.views import get_user_pending_order
 
 
 # Create your views here.
 
-#def home(request):
-#    # /home/
-#    return HttpResponse('<h1>Hi this is the mainpage</h1>')
-   
+# this view sends the content of the index page to the index.html template
 def index(request):
     users = User.objects.all()
     cards = Card.objects.all()
@@ -68,6 +65,7 @@ def index(request):
     }
     return HttpResponse(template.render(context, request))
 
+# this view sends the content of the users page to the users frontend page
 def users(request):
     template = loader.get_template('magic/users.html')
     all_users = User.objects.all()
@@ -100,6 +98,7 @@ def users(request):
     }
     return HttpResponse(template.render(context, request))
 
+# this view sends the details of a specific user to the user_details frontend page
 def user_detail(request, user_id):
     user = User.objects.get(pk=user_id)
     total_cards = user.card_set.all()
@@ -119,6 +118,7 @@ def user_detail(request, user_id):
     }
     return HttpResponse(template.render(context, request))
 
+# this view sends the cards owned by a specific user to the frontend
 def user_detail_cards(request, user_id):
     user = User.objects.get(pk=user_id)
     all_cards = user.card_set.all()
@@ -158,8 +158,9 @@ def user_detail_cards(request, user_id):
     }
     return render(request, 'magic/user_detail_cards.html', context)
 
+# this view sends the content of the cards page to the cards frontend page
 def cards(request):
-    #template_name to render the view
+    #template_name to render the template
     template = loader.get_template('magic/cards.html')
     #if the user is authenticated he/she cannot see his/her cards in the cards_for_sale view
     if request.user.is_authenticated:
@@ -207,6 +208,7 @@ def cards(request):
 
     return HttpResponse(template.render(context, request))
 
+# this view sends the details of a specific card to the card_details frontend page
 def card_detail(request, card_id):
     template = loader.get_template('magic/card_detail.html')
     try:
@@ -224,6 +226,7 @@ def card_detail(request, card_id):
 
     return HttpResponse('<h3>Magic Card Trader About</h3>')
 
+# this class based view uses the address create form and validates it
 class AddressCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Address
     form_class = AddressUpdateForm
@@ -247,6 +250,8 @@ class AddressCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         form.save()
         return super().form_valid(form)
 
+# this class based view uses the card create form and validates it
+# also communicates with the MTG API
 class CardCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Card
     form_class = CardForm
@@ -282,19 +287,18 @@ class CardCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         
         return super().form_valid(form)
 
-
+# this class based view controls the card update 
 class CardUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Card
     fields = ['name', 'set_name', 'price', 'user', 'is_foil', 'is_ordered']
     success_url = reverse_lazy('Magic:profile_cards')
-    #form = self.form_class(Card.name, Card.set_name, Card.price, Card.user, Card.is_foil)
     def test_func(self):
         post = self.get_object()
         if self.request.user == post.user:
             return True
         return False
 
-
+# this view deletes cards from the DB
 class CardDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Card
     success_url = reverse_lazy('Magic:profile_cards')
