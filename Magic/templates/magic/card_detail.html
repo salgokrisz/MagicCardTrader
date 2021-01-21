@@ -86,7 +86,7 @@
                         {% endif %}
                     </div>
                     {% if request.user == card.user %}
-                    <form action="{% url 'Magic:card_update' card.id %}" method="POST" style="display: inline;" class="mt-4 mb-2 ml-2">
+                    <form action="{% url 'Magic:card_update' card.id %}" method="GET" style="display: inline;" class="mt-4 mb-2 ml-2">
                         {% csrf_token %}
                         <input type="hidden" name="card_id" value="{{card.id}}"/>
                         <button class="btn btn-secondary btn-sm" type="submit">

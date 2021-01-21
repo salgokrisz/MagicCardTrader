@@ -71,32 +71,38 @@
                         </article>
                 </div>  
                 {% endfor %}
+
+            
             {% else %}
                 <h1>You have no messages sent or received yet</h1>
             {% endif %}
         </div>
         
     </div>
-    <form role="form" method="POST" action="{% url 'Magic:send' %}">
-        {% csrf_token %}
-        <article class="media mr-7 ml-7">
-            <div class="media-content">
-                <input type="hidden" name="to_user" value="{{ active_direct }}">
-                <div class="field">
-                    <p class="control">
-                        <textarea class="textarea" name="content" placeholder="Send message..."></textarea>
-                    </p>
-                </div>
-                <nav class="level">
-                    <div class="level-left">
-                        <div class="level-item">
-                            <button type="submit" name="action" class="button is-info">Send</button>
+    {% if d_messages %}
+        {% if directs %}
+            <form role="form" method="POST" action="{% url 'Magic:send' %}">
+                {% csrf_token %}
+                <article class="media mr-7 ml-7">
+                    <div class="media-content">
+                        <input type="hidden" name="to_user" value="{{ active_direct }}">
+                        <div class="field">
+                            <p class="control">
+                                <textarea class="textarea" name="content" placeholder="Send message..."></textarea>
+                            </p>
                         </div>
+                        <nav class="level">
+                            <div class="level-left">
+                                <div class="level-item">
+                                    <button type="submit" name="action" class="button is-info">Send</button>
+                                </div>
+                            </div>
+                        </nav>
                     </div>
-                </nav>
-            </div>
-        </article>
-    </form>
+                </article>
+            </form>
+        {% endif %}
+    {% endif %}
 </section>
 
 

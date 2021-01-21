@@ -278,7 +278,7 @@ class CardCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         if len(versions) > 0:
             retval = versions[0].image_url
         else:
-            retval = "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg/revision/latest/scale-to-width-down/250?cb=20140813141013"
+            retval = "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
         if form.is_valid():
             obj = form.save(commit=False)
             obj.image_url = retval
